@@ -26,12 +26,15 @@ router.post('/openai', async (req: Request, res: Response) => {
     return
   }
   try {
-    const completion = await openai.chat.completions.create({
+    const stream = await openai.chat.completions.create({
       messages: [{role: 'system', content: prompt}, {role: 'user', content: description}],
       model: 'gpt-4-turbo',
+      stream: true
     })
-    const content = completion.choices[0]['message']['content']
-    res.status(200).json({description, content})
+    for await (const chunk of stream) {
+        res.write(chunk.choices[0]?.delta?.content || "");
+    }
+    res.status(204).end()
   } catch (error: unknown) {
     if (error instanceof Error) {
       res.status(500).json({error: error.message})
