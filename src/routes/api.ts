@@ -30,7 +30,7 @@ router.post('/openai', async (req: Request, res: Response) => {
       messages: [{role: 'system', content: prompt}, {role: 'user', content: description}],
       model: 'gpt-4-turbo',
     })
-    const content = completion.choices[0]
+    const content = completion.choices[0]['message']['content']
     res.status(200).json({description, content})
   } catch (error: unknown) {
     if (error instanceof Error) {
