@@ -19,14 +19,18 @@ router.post('/openai', async (req: Request, res: Response) => {
 
   const {description, prompt_type}: { description: string, prompt_type: PromptType } = req.body
   const prompt = prompts[prompt_type]
-
+  console.debug('description', description)
+  console.debug('prompt', prompt)
+  if(!prompt){
+    res.status(400).json({error: 'Invalid prompt type'})
+    return
+  }
   try {
     const completion = await openai.chat.completions.create({
       messages: [{role: 'system', content: prompt}, {role: 'user', content: description}],
       model: 'gpt-4-turbo',
     })
     const content = completion.choices[0]
-    console.log(content)
     res.status(200).json({description, content})
   } catch (error: unknown) {
     if (error instanceof Error) {
