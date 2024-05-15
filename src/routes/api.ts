@@ -28,7 +28,7 @@ router.post('/openai', async (req: Request, res: Response) => {
   try {
     const stream = await openai.chat.completions.create({
       messages: [{role: 'system', content: prompt}, {role: 'user', content: description}],
-      model: 'gpt-4-turbo',
+      model: 'gpt-4o',
       stream: true
     })
     for await (const chunk of stream) {
