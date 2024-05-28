@@ -17,16 +17,20 @@ const prompts: Record<PromptType, string> = {
 
 router.post('/openai', async (req: Request, res: Response) => {
 
-  let {description, prompt_type}: { description: string, prompt_type: PromptType } = req.body
+  let {content, prompt_type}: { content: string, prompt_type: PromptType } = req.body
+  // prompt_type and description are deprecated, pending removal
   if (!prompt_type){
     prompt_type = req.body.promptType
   }
-  if (!description || !prompt_type){
-    res.status(400).json({error: 'Both description and promptType are required fields'})
+  if (!content){
+    content = req.body.description
+  }
+  if (!content || !prompt_type){
+    res.status(400).json({error: 'Both content and promptType are required fields'})
     return
   }
   const prompt = prompts[prompt_type]
-  console.debug('description', description)
+  console.debug('content', content)
   console.debug('prompt', prompt)
   if(!prompt){
     res.status(400).json({error: 'Invalid prompt type'})
@@ -34,7 +38,7 @@ router.post('/openai', async (req: Request, res: Response) => {
   }
   try {
     const stream = await openai.chat.completions.create({
-      messages: [{role: 'system', content: prompt}, {role: 'user', content: description}],
+      messages: [{role: 'system', content: prompt}, {role: 'user', content: content}],
       model: 'gpt-4o',
       stream: true
     })
