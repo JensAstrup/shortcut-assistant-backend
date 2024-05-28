@@ -17,7 +17,14 @@ const prompts: Record<PromptType, string> = {
 
 router.post('/openai', async (req: Request, res: Response) => {
 
-  const {description, prompt_type}: { description: string, prompt_type: PromptType } = req.body
+  let {description, prompt_type}: { description: string, prompt_type: PromptType } = req.body
+  if (!prompt_type){
+    prompt_type = req.body.promptType
+  }
+  if (!description || !prompt_type){
+    res.status(400).json({error: 'Both description and promptType are required fields'})
+    return
+  }
   const prompt = prompts[prompt_type]
   console.debug('description', description)
   console.debug('prompt', prompt)
