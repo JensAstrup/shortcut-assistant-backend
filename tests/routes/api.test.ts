@@ -1,4 +1,4 @@
-import processAnalysis from '@sb/controllers/openAi'
+import processAnalysis from '../../src/controllers/openAi'
 
 
 const mockRouter = {

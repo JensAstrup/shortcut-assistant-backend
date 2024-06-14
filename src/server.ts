@@ -1,5 +1,6 @@
-import app from '@sb/app'
 import { config } from 'dotenv'
+
+import app from './app'
 
 
 config()
