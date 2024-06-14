@@ -1,11 +1,11 @@
 {
   "name": "shortcut-assistant-proxy",
-  "version": "1.0.0",
+  "version": "2.0.2",
   "description": "A proxy API for OpenAI.",
   "main": "dist/src/server.js",
   "scripts": {
     "start": "node -r tsconfig-paths/register dist/src/server.js",
-    "build": "tsc && tscpaths -p tsconfig.json -s ./src -o ./dist",
+    "build": "tsc",
     "dev": "ts-node-dev --transpile-only --loader ts-node/esm -r tsconfig-paths/register src/server.ts",
     "lint": "eslint --ext ts src",
     "test": "jest"
