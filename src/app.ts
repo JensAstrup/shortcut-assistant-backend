@@ -1,14 +1,15 @@
-import express, { Application } from 'express';
-import { config } from 'dotenv';
-config(); // Load environment variables from .env file
-import apiRouter from './routes/api';
+import { config } from 'dotenv'
+import express, { Application } from 'express'
 
-const app: Application = express();
-const PORT = process.env.PORT || 3000;
 
-app.use(express.json());
-app.use('/api', apiRouter);
+config()
+import apiRouter from './routes/api'
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+
+const app: Application = express()
+
+app.use(express.json())
+app.use('/api', apiRouter)
+
+
+export default app
