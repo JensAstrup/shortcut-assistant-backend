@@ -1,9 +1,5 @@
-import { config } from 'dotenv'
+import apiRouter from '@sb/routes/api'
 import express, { Application } from 'express'
-
-
-config()
-import apiRouter from './routes/api'
 
 
 const app: Application = express()

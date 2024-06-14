@@ -2,13 +2,13 @@ const mockApp = {
   listen: jest.fn(),
 }
 
-jest.mock('../src/app', () => mockApp)
+jest.mock('@sb/app', () => mockApp)
 
 
 describe('server', () => {
   it('should listen on a port', () => {
 
-    require('../src/server')
+    require('@sb/server')
 
     expect(mockApp.listen).toHaveBeenCalled()
   })
