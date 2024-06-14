@@ -11,7 +11,7 @@
     "types": ["node", "jest"],
     "typeRoots": ["./node_modules/@types"],
     "paths": {
-        "@sb/*": ["src/*"]
+        "@sb/*": ["./src/*"]
         },
   },
   "include": ["src/**/*", "tests/**/*"]
