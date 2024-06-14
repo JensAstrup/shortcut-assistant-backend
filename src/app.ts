@@ -1,5 +1,6 @@
-import apiRouter from '@sb/routes/api'
 import express, { Application } from 'express'
+
+import apiRouter from './routes/api'
 
 
 const app: Application = express()
