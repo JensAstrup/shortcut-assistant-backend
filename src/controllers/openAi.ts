@@ -16,20 +16,28 @@ const prompts: Record<PromptType, string> = {
   breakup: BREAKUP_PROMPT
 }
 
-type PromptType = 'analyze' | 'breakup';
+interface IncomingRequest extends Request {
+    body: {
+        content?: string
+        description?: string
+        promptType?: PromptType
+        prompt_type?: PromptType
+    }
+}
 
-export default async function processAnalysis(req: Request, res: Response) {
+type PromptType = 'analyze' | 'breakup'
 
-  let {content, prompt_type}: { content: string, prompt_type: PromptType } = req.body
+export default async function processAnalysis(req: IncomingRequest, res: Response): Promise<void> {
+  let { content, prompt_type }: { content?: string, prompt_type?: PromptType } = req.body
   // prompt_type and description are deprecated, pending removal
-  if (!prompt_type){
+  if (!prompt_type) {
     prompt_type = req.body.promptType
   }
-  if (!content){
+  if (!content) {
     content = req.body.description
   }
-  if (!content || !prompt_type){
-    res.status(StatusCodes.BAD_REQUEST).json({error: 'Both content and promptType are required fields'})
+  if (!content || !prompt_type) {
+    res.status(StatusCodes.BAD_REQUEST).json({ error: 'Both content and promptType are required fields' })
     return
   }
   const prompt = prompts[prompt_type]
@@ -37,13 +45,13 @@ export default async function processAnalysis(req: Request, res: Response) {
   console.debug('content', content)
   console.debug('prompt', prompt)
 
-  if(!prompt){
-    res.status(StatusCodes.BAD_REQUEST).json({error: 'Invalid prompt type'})
+  if (!prompt) {
+    res.status(StatusCodes.BAD_REQUEST).json({ error: 'Invalid prompt type' })
     return
   }
   try {
     const stream = await openai.chat.completions.create({
-      messages: [{role: 'system', content: prompt}, {role: 'user', content: content}],
+      messages: [{ role: 'system', content: prompt }, { role: 'user', content: content }],
       model: 'gpt-4o',
       stream: true
     })
@@ -54,7 +62,7 @@ export default async function processAnalysis(req: Request, res: Response) {
   }
   catch (error: unknown) {
     if (error instanceof Error) {
-      res.status(StatusCodes.SERVER_ERROR).json({error: error.message})
+      res.status(StatusCodes.SERVER_ERROR).json({ error: error.message })
     }
   }
 }
