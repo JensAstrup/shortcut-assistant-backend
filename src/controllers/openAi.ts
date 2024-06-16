@@ -18,7 +18,7 @@ const prompts: Record<PromptType, string> = {
 
 interface IncomingRequest extends Request {
     body: {
-        content: string
+        content?: string
         description?: string
         promptType?: PromptType
         prompt_type?: PromptType
@@ -27,7 +27,7 @@ interface IncomingRequest extends Request {
 
 type PromptType = 'analyze' | 'breakup'
 
-export default async function processAnalysis(req: IncomingRequest, res: Response) {
+export default async function processAnalysis(req: IncomingRequest, res: Response): Promise<void> {
   let { content, prompt_type }: { content?: string, prompt_type?: PromptType } = req.body
   // prompt_type and description are deprecated, pending removal
   if (!prompt_type) {
