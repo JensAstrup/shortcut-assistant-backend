@@ -1,0 +1,14 @@
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+        - NODE_ENV=development
+        - PORT=3000
+        - DD_API_KEY=${DD_API_KEY}
+        - OPENAI_API_KEY=${OPENAI_API_KEY}
+        - DD_HOSTNAME=datadog-agent
+        - DD_APM_ENABLED=true
+    volumes:
+      - .:/app
