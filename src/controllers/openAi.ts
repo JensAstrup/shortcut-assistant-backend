@@ -1,5 +1,7 @@
 import { Request, Response } from 'express'
-import OpenAI from 'openai'
+import { OpenAI } from 'openai'
+
+import { logger } from '@sb/utils/logger'
 
 import { StatusCodes } from '../types/status-codes'
 
@@ -42,8 +44,8 @@ export default async function processAnalysis(req: IncomingRequest, res: Respons
   }
   const prompt = prompts[prompt_type]
 
-  console.debug('content', content)
-  console.debug('prompt', prompt)
+  logger.debug(`content: ${content}`)
+  logger.debug(`prompt_type: ${prompt_type}`)
 
   if (!prompt) {
     res.status(StatusCodes.BAD_REQUEST).json({ error: 'Invalid prompt type' })

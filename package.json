@@ -9,7 +9,8 @@
     "dev": "ts-node-dev --transpile-only --loader ts-node/esm -r tsconfig-paths/register src/server.ts",
     "lint": "eslint --ext ts src",
     "test": "jest",
-    "test-coverage": "jest --coverage --coverageDirectory=coverage"
+    "test-coverage": "jest --coverage --coverageDirectory=coverage",
+    "replace-paths": "tscpaths -p tsconfig.json -s ./src -o ./dist/src"
   },
   "dependencies": {
     "datadog-winston": "^1.6.0",
@@ -32,6 +33,7 @@
     "@typescript-eslint/parser": "^7.7.0",
     "eslint": "8.57.0",
     "eslint-config-yenz": "^5.2.1",
+    "eslint-import-resolver-typescript": "^3.6.1",
     "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-jest": "^28.6.0",
     "eslint-plugin-perfectionist": "^2.10.0",
