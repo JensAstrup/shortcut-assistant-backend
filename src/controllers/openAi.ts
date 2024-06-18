@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { OpenAI } from 'openai'
+import OpenAI from 'openai'
 
 import { logger } from '@sb/utils/logger'
 
