@@ -18,6 +18,8 @@ module.exports = {
     ...baseConfig.parserOptions,
     "ecmaVersion": "latest",
     "sourceType": "module",
+    "project": "./tsconfig.json",
+    "tsconfigRootDir": __dirname,
   },
   "plugins": [
     ...baseConfig.plugins,
@@ -42,5 +44,13 @@ module.exports = {
         "no-magic-numbers": "off"
       }
     }
-  ]
+  ],
+  settings: {
+    'import/resolver': {
+      typescript: {
+        alwaysTryTypes: true,
+        project: './tsconfig.json'
+      }
+    }
+  }
 }
