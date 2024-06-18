@@ -7,7 +7,7 @@
 const config = {
   coverageProvider: 'v8',
 
-  setupFilesAfterEnv: [],
+  setupFilesAfterEnv: ['<rootDir>/tests/jest.setup.ts'],
 
   moduleNameMapper: {
     '^@sb/(.*)$': '<rootDir>/src/$1'

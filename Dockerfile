@@ -26,6 +26,7 @@ RUN yarn install
 
 COPY . .
 RUN yarn run build
+RUN yarn run replace-paths
 
 
 # Ensure the Datadog configuration file exists and set it to debug mode
