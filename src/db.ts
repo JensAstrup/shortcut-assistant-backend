@@ -8,9 +8,9 @@ const database = new DataSource({
   type: 'postgres',
   host: 'db',
   port: 5432,
-  username: 'postgres',
-  password: 'postgres',
-  database: 'postgres',
+  username: process.env.POSTGRES_USER || 'postgres',
+  password: process.env.POSTGRES_PASSWORD || '',
+  database: process.env.POSTGRES_DB || 'postgres',
   synchronize: true,
   entities: [
     User, Workspace
