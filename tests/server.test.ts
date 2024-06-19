@@ -2,7 +2,9 @@ import { logger } from '@sb/utils/logger'
 
 
 const mockApp = {
-  listen: jest.fn(),
+  listen: jest.fn((port, callback: () => void) => {
+    callback()
+  }),
 }
 
 const mockDatabase = {
@@ -40,6 +42,7 @@ describe('server', () => {
     expect(mockApp.listen).toHaveBeenCalled()
     expect(mockDatabase.initialize).toHaveBeenCalled()
     expect((mockLogger.info)).toHaveBeenCalledWith('Database connected')
+    expect((mockLogger.info)).toHaveBeenCalledWith('Server running on port 3000')
   })
 
   it('should log an error if the database connection fails', async () => {
