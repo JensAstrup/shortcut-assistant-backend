@@ -1,7 +1,7 @@
 {
-  "name": "shortcut-assistant-proxy",
-  "version": "2.1.1",
-  "description": "A proxy API for OpenAI.",
+  "name": "shortcut-assistant-backend",
+  "version": "3.0.0",
+  "description": "The backend service powering the Shortcut Assistant browser extension.",
   "main": "dist/src/server.js",
   "scripts": {
     "start": "node dist/src/server.js",
