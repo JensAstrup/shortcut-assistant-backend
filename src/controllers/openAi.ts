@@ -1,8 +1,6 @@
 import { Request, Response } from 'express'
 import OpenAI from 'openai'
 
-import database from '@sb/db'
-import { User } from '@sb/entities/User'
 import { logger } from '@sb/utils/logger'
 
 import { StatusCodes } from '../types/status-codes'
