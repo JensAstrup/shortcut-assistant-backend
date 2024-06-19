@@ -7,14 +7,15 @@
     "start": "node dist/src/server.js",
     "build": "tsc",
     "dev": "ts-node-dev --transpile-only --loader ts-node/esm -r tsconfig-paths/register src/server.ts",
-    "lint": "eslint --ext ts src",
+    "lint": "eslint src tests",
     "test": "jest",
     "test-coverage": "jest --coverage --coverageDirectory=coverage",
     "replace-paths": "tscpaths -p tsconfig.json -s ./src -o ./dist/src"
   },
   "dependencies": {
+    "@sentry/node": "^8.9.2",
+    "@sentry/profiling-node": "^8.9.2",
     "datadog-winston": "^1.6.0",
-    "dd-trace": "^5.17.0",
     "dotenv": "^8.2.0",
     "express": "^4.19.2",
     "openai": "^4.44.0",

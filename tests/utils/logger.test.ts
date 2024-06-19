@@ -1,5 +1,5 @@
 import DatadogWinston from 'datadog-winston'
-import winston from 'winston'
+import { createLogger } from 'winston'
 
 
 jest.mock('datadog-winston')
@@ -25,7 +25,7 @@ import { logger } from '@sb/utils/logger'
 
 describe('Logger', () => {
   it('should be created with the correct configuration', () => {
-    expect(logger).toBeInstanceOf(winston.createLogger().constructor)
+    expect(logger).toBeInstanceOf(createLogger().constructor)
 
     expect(logger.level).toBe('debug')
 
