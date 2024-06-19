@@ -1,10 +1,10 @@
 import DatadogWinston from 'datadog-winston'
-import winston, { Logger } from 'winston'
+import { Logger, createLogger, format } from 'winston'
 
 
-export const logger: Logger = winston.createLogger({
+export const logger: Logger = createLogger({
   level: 'debug',
-  format: winston.format.json(),
+  format: format.json(),
   defaultMeta: { service: 'backend' },
 })
 
