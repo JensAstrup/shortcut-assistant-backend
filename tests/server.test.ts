@@ -49,7 +49,7 @@ describe('server', () => {
     mockDatabase.initialize.mockRejectedValueOnce(new Error('Database connection failed'))
     const startServer = await import('@sb/server')
     await expect(startServer.default).rejects.toThrow('process.exit: 1')
-    expect(mockLogger.info).toHaveBeenCalledWith('Database connection error', expect.any(Error))
+    expect(mockLogger.error).toHaveBeenCalledWith('Database connection error', expect.any(Error))
     expect((mockLogger.error as jest.Mock).mock.calls[0][1].message).toBe('Database connection failed')
     expect(exitSpy).toHaveBeenCalledWith(1)
   })
