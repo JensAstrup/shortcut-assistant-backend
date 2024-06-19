@@ -47,16 +47,13 @@ describe('server', () => {
 
   it('should log an error if the database connection fails', async () => {
     mockDatabase.initialize.mockRejectedValueOnce(new Error('Database connection failed'))
-    try {
-      await import('@sb/server')
-    }
-    catch (e) {
-      // eslint-disable-next-line jest/no-conditional-expect
-      expect((logger.error as jest.Mock)).toHaveBeenCalledWith('Database connection error', expect.any(Error))
-      // eslint-disable-next-line jest/no-conditional-expect
-      expect((logger.error as jest.Mock).mock.calls[0][1].message).toBe('Database connection failed')
-      // eslint-disable-next-line jest/no-conditional-expect
-      expect(exitSpy).toHaveBeenCalledWith(1)
-    }
+    const startServer = await import('@sb/server')
+    await expect(startServer.default).rejects.toThrow('process.exit: 1')
+    // eslint-disable-next-line jest/no-conditional-expect
+    expect((logger.error as jest.Mock)).toHaveBeenCalledWith('Database connection error', expect.any(Error))
+    // eslint-disable-next-line jest/no-conditional-expect
+    expect((logger.error as jest.Mock).mock.calls[0][1].message).toBe('Database connection failed')
+    // eslint-disable-next-line jest/no-conditional-expect
+    expect(exitSpy).toHaveBeenCalledWith(1)
   })
 })
