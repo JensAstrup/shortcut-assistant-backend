@@ -32,8 +32,11 @@ module.exports = {
     ...baseConfig.rules,
     "@typescript-eslint/restrict-template-expressions": "off",
     "@typescript-eslint/no-unnecessary-condition": "off",
-    // In theory this rule is nice, but more often than not it's just not applicable/useful
-    "typescript-eslint/no-unsafe-assignment": "off",
+
+    // In theory these rules are nice, but more often than not it's just not applicable/useful
+    "@typescript-eslint/no-unsafe-assignment": "off",
+    "@typescript-eslint/no-unsafe-member-access": "off",
+
     "perfectionist/sort-enums": "off",
     "no-console": "off",
     'no-magic-numbers': ['error',

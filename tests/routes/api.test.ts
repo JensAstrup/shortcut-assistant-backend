@@ -1,4 +1,4 @@
-import processAnalysis from '../../src/controllers/openAi'
+import processAnalysis from '@sb/controllers/openAi'
 
 
 const mockRouter = {
@@ -6,6 +6,7 @@ const mockRouter = {
 }
 
 jest.mock('express', () => ({
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   Router: () => mockRouter,
 }))
 

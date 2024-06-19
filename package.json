@@ -7,7 +7,7 @@
     "start": "node dist/src/server.js",
     "build": "tsc",
     "dev": "ts-node-dev --transpile-only --loader ts-node/esm -r tsconfig-paths/register src/server.ts",
-    "lint": "eslint --ext ts src",
+    "lint": "eslint src tests",
     "test": "jest",
     "test-coverage": "jest --coverage --coverageDirectory=coverage",
     "replace-paths": "tscpaths -p tsconfig.json -s ./src -o ./dist/src"

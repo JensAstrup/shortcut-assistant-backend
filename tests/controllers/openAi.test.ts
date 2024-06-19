@@ -31,6 +31,7 @@ jest.mock('openai', () => {
 
 describe('processAnalysis', () => {
   it('should respond with a 400 if content is missing', async () => {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const { status, body } = await request(app).post('/api/openai').send({ promptType: 'analyze' })
     expect(status).toBe(400)
     expect(body).toHaveProperty('error')
