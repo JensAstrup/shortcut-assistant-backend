@@ -1,7 +1,7 @@
 import { config } from 'dotenv'
 
 
-config() // Load environment variables as early as possible
+config()
 
 import database from '@sb/db'
 import { logger } from '@sb/utils/logger'
