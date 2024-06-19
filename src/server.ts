@@ -27,3 +27,5 @@ async function startServer(): Promise<void> {
 }
 
 startServer()
+
+export default startServer
