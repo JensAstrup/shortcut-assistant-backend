@@ -2,7 +2,7 @@ import { Response } from 'express'
 
 import { IncomingAnalyzeRequest, PromptType, prompts } from '@sb/types/prompt-request'
 import { StatusCodes } from '@sb/types/status-codes'
-import { logger } from '@sb/utils/logger'
+import logger from '@sb/utils/logger'
 
 
 function parseIncomingRequest(req: IncomingAnalyzeRequest, res: Response): Record<string, string> | undefined {

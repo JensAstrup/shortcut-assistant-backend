@@ -4,7 +4,7 @@ import { config } from 'dotenv'
 config()
 
 import database from '@sb/db'
-import { logger } from '@sb/utils/logger'
+import logger from '@sb/utils/logger'
 
 import app from './app'
 

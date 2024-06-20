@@ -7,7 +7,7 @@ import UserInterface from '@sb/interfaces/User'
 
 const ZodUser = z.object({
   name: z.string(),
-  email: z.string(),
+  email: z.string().email(),
   shortcutApiToken: z.string(),
   googleId: z.string(),
 }) satisfies ZodType<UserInterface>

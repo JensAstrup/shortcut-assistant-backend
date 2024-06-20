@@ -3,7 +3,6 @@ import OpenAI from 'openai'
 
 import parseIncomingRequest from '@sb/controllers/ai/analyze/parse-incoming-request'
 import { IncomingAnalyzeRequest } from '@sb/types/prompt-request'
-import { logger } from '@sb/utils/logger'
 
 import { StatusCodes } from '../types/status-codes'
 

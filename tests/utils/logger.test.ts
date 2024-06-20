@@ -20,7 +20,7 @@ jest.mock('winston', () => {
   }
 })
 
-import { logger } from '@sb/utils/logger'
+import logger from '@sb/utils/logger'
 
 
 describe('Logger', () => {

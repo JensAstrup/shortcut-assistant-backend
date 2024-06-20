@@ -1,11 +1,11 @@
 import parseIncomingRequest from '@sb/controllers/ai/analyze/parse-incoming-request'
 import { IncomingAnalyzeRequest, prompts } from '@sb/types/prompt-request'
-import { logger } from '@sb/utils/logger'
+import logger from '@sb/utils/logger'
 
 
-jest.mock('@sb/utils/logger', () => ({
-  logger: { info: jest.fn() }
-}))
+jest.mock('@sb/utils/logger')
+
+const mockLogger = logger as jest.Mocked<typeof logger>
 
 
 describe('parseIncomingRequest', () => {
@@ -49,7 +49,7 @@ describe('parseIncomingRequest', () => {
     // @ts-expect-error req and res are mocked
     const result = parseIncomingRequest(req, res)
     expect(result).toEqual({ content: 'test', prompt: prompts.analyze })
-    expect(logger.info).toHaveBeenCalledWith('Received request with prompt type analyze')
-    expect(logger.info).toHaveBeenCalledWith('Parsed request with prompt type analyze')
+    expect(mockLogger.info).toHaveBeenCalledWith('Received request with prompt type analyze')
+    expect(mockLogger.info).toHaveBeenCalledWith('Parsed request with prompt type analyze')
   })
 })

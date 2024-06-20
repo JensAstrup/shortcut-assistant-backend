@@ -2,7 +2,7 @@ import { Request, Response } from 'express'
 
 import registerUserFromGoogle from '@sb/controllers/users/utils/register'
 import { StatusCodes } from '@sb/types/status-codes'
-import { logger } from '@sb/utils/logger'
+import logger from '@sb/utils/logger'
 
 
 
