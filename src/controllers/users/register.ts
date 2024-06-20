@@ -25,6 +25,7 @@ async function register(request: Request, response: Response): Promise<void> {
       response.status(StatusCodes.SERVER_ERROR).json({ error: 'A server error occurred' })
     }
     else {
+      logger.error(`An unknown error occurred: ${e}`)
       response.status(StatusCodes.SERVER_ERROR).json({ error: 'An unknown error occurred' })
     }
   }
