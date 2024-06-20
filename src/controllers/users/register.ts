@@ -5,9 +5,6 @@ import { StatusCodes } from '@sb/types/status-codes'
 import logger from '@sb/utils/logger'
 
 
-
-
-
 async function register(request: Request, response: Response): Promise<void> {
   const userInfo = request.body as Record<string, string>
 
