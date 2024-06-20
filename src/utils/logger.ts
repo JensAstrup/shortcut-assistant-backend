@@ -14,6 +14,7 @@ logger.add(
     hostname: 'datadog-agent',
     service: 'backend',
     ddsource: 'nodejs',
-    intakeRegion: 'us5'
+    intakeRegion: 'us5',
+    ddtags: `env:${process.env.NODE_ENV},version:${process.env.VERSION}`,
   })
 )
