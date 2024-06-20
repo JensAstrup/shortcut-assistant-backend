@@ -1,4 +1,4 @@
-import { logger } from '@sb/utils/logger'
+import logger from '@sb/utils/logger'
 
 
 const mockApp = {
@@ -13,12 +13,7 @@ const mockDatabase = {
 
 jest.mock('@sb/app', () => mockApp)
 jest.mock('@sb/db', () => mockDatabase)
-jest.mock('@sb/utils/logger', () => ({
-  logger: {
-    info: jest.fn(),
-    error: jest.fn(),
-  },
-}))
+jest.mock('@sb/utils/logger')
 
 const mockLogger = logger as jest.Mocked<typeof logger>
 

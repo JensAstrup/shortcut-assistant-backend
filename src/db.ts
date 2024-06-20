@@ -1,9 +1,6 @@
 import { config } from 'dotenv'
 import { DataSource } from 'typeorm'
 
-import { User } from '@sb/entities/User'
-import { Workspace } from '@sb/entities/Workspace'
-
 
 config()
 
@@ -16,12 +13,9 @@ const database = new DataSource({
   host: process.env.DB_HOSTNAME,
   database: process.env.DB_NAME,
   port: parseInt(<string>process.env.DB_PORT),
-  ssl: {
-    rejectUnauthorized: false,
-  },
-  entities: [
-    User, Workspace
-  ],
+  ssl: process.env.NODE_ENV === 'development' ? false : { rejectUnauthorized: false },
+  migrations: ['src/migrations/**/*.ts'],
+  entities: ['src/entities/**/*.ts'],
 })
 
 export default database

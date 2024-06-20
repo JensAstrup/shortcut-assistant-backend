@@ -1,10 +1,11 @@
 import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm'
 
 import { User } from '@sb/entities/User'
+import WorkspaceInterface from '@sb/interfaces/Workspace'
 
 
 @Entity()
-export class Workspace {
+export class Workspace implements WorkspaceInterface {
   @PrimaryGeneratedColumn()
     id: number
 
