@@ -20,7 +20,6 @@ describe('registerUserFromGoogle', () => {
   }
 
   beforeEach(() => {
-    // Clear all instances and calls to the mock before each test
     jest.clearAllMocks()
   })
 
