@@ -22,6 +22,7 @@ async function startServer(): Promise<void> {
   }
   catch (error) {
     logger.error('Database connection error', error)
+    console.error('Database connection error', error)
     process.exit(1) // Exit the process if the database connection fails
   }
 }
