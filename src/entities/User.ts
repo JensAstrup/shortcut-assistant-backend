@@ -15,7 +15,10 @@ export class User {
     email: string
 
   @Column()
-    apiToken: string
+    shortcutApiToken: string
+
+  @Column()
+    googleId: string
 
   @ManyToOne(() => Workspace, workspace => workspace.users)
   @JoinColumn({ name: 'workspaceId' })
