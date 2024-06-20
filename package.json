@@ -1,16 +1,18 @@
 {
   "name": "shortcut-assistant-backend",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "description": "The backend service powering the Shortcut Assistant browser extension.",
   "main": "dist/src/server.js",
   "scripts": {
     "start": "node dist/src/server.js",
-    "build": "tsc",
-    "dev": "ts-node-dev --transpile-only --loader ts-node/esm -r tsconfig-paths/register src/server.ts",
+    "start:dev": "ts-node-dev --transpile-only --loader ts-node/esm -r tsconfig-paths/register src/server.ts",
+    "build": "tsc && npm run build:copy-db-assets && npm run build:replace-paths",
+    "build:copy-db-assets": "cp -r src/migrations dist/migrations && cp -r src/entities dist/entities",
+    "build:replace-paths": "tscpaths -p tsconfig.json -s ./src -o ./dist/src",
     "lint": "eslint src tests",
     "test": "jest",
-    "test-coverage": "jest --coverage --coverageDirectory=coverage",
-    "replace-paths": "tscpaths -p tsconfig.json -s ./src -o ./dist/src"
+    "test:coverage": "jest --coverage --coverageDirectory=coverage",
+    "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js"
   },
   "dependencies": {
     "@sentry/node": "^8.9.2",
@@ -24,7 +26,8 @@
     "ts-node": "^10.9.2",
     "typeorm": "^0.3.20",
     "typescript": "^5.4.5",
-    "winston": "^3.13.0"
+    "winston": "^3.13.0",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@jens_astrup/tscpaths": "^0.0.11",

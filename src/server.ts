@@ -4,7 +4,7 @@ import { config } from 'dotenv'
 config()
 
 import database from '@sb/db'
-import { logger } from '@sb/utils/logger'
+import logger from '@sb/utils/logger'
 
 import app from './app'
 
@@ -22,6 +22,7 @@ async function startServer(): Promise<void> {
   }
   catch (error) {
     logger.error('Database connection error', error)
+    console.error('Database connection error', error)
     process.exit(1) // Exit the process if the database connection fails
   }
 }
