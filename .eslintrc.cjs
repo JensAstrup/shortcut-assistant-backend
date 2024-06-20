@@ -3,6 +3,7 @@ const baseConfig = require('eslint-config-yenz')
 
 module.exports = {
   ...baseConfig,
+  "ignorePatterns": ["*/migrations/"],
   "env": {
     "es2022": true,
     "jest": true,
@@ -49,12 +50,6 @@ module.exports = {
         "no-magic-numbers": "off"
       }
     },
-    {
-      files: ["src/migrations/**"],
-      rules: {
-        "all": "off" // Disable all rules for this directory
-      }
-    }
   ],
   settings: {
     'import/resolver': {

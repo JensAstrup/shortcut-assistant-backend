@@ -1,4 +1,5 @@
 import { Response } from 'express'
+// eslint-disable-next-line import/no-named-as-default
 import OpenAI from 'openai'
 
 import parseIncomingRequest from '@sb/controllers/ai/analyze/parse-incoming-request'
