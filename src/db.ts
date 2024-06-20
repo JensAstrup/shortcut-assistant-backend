@@ -1,14 +1,9 @@
-import { join } from 'path'
-
 import { config } from 'dotenv'
 import { DataSource } from 'typeorm'
 
 
 config()
 
-// I really do not like this solution for handling the paths, any suggestions?
-const isDevelopment = process.env.NODE_ENV === 'development'
-const rootPath = isDevelopment ? 'src' : 'dist/src'
 
 const database = new DataSource({
   type: 'postgres',
@@ -19,8 +14,8 @@ const database = new DataSource({
   database: process.env.DB_NAME,
   port: parseInt(<string>process.env.DB_PORT),
   ssl: process.env.NODE_ENV === 'development' ? false : { rejectUnauthorized: false },
-  migrations: [join(__dirname, '..', rootPath, 'migrations', '**', '*.{ts,js}')],
-  entities: [join(__dirname, '..', rootPath, 'entities', '**', '*.{ts,js}')],
+  migrations: ['../migrations/**/*'],
+  entities: ['../entities/**/*'],
 })
 
 export default database
