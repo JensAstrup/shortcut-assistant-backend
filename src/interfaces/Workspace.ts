@@ -1,5 +1,5 @@
 interface WorkspaceInterface {
-    id: number
+    id?: number
     shortcutId: string
     name: string
     vectorStorageId?: string
