@@ -44,9 +44,15 @@ module.exports = {
   },
   "overrides": [
     {
-      files: ["**/*.test.*"], // Test files patterns
+      files: ["**/*.test.*"],
       rules: {
         "no-magic-numbers": "off"
+      }
+    },
+    {
+      files: ["src/migrations/**"],
+      rules: {
+        "all": "off" // Disable all rules for this directory
       }
     }
   ],
