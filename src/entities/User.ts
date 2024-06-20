@@ -1,10 +1,11 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm'
 
 import { Workspace } from '@sb/entities/Workspace'
+import UserInterface from '@sb/interfaces/User'
 
 
 @Entity()
-export class User {
+export class User implements UserInterface {
   @PrimaryGeneratedColumn()
     id: number
 
