@@ -6,8 +6,8 @@
   "scripts": {
     "start": "node dist/src/server.js",
     "start:dev": "ts-node-dev --transpile-only --loader ts-node/esm -r tsconfig-paths/register src/server.ts",
-    "build": "tsc && npm run build:copy-migrations && npm run build:replace-paths",
-    "build:copy-migrations": "copyfiles -u 1 src/migrations/**/*.ts dist/migrations",
+    "build": "tsc && npm run build:copy-db-assets && npm run build:replace-paths",
+    "build:copy-db-assets": "cp -r src/migrations dist/migrations && cp -r src/entities dist/entities",
     "build:replace-paths": "tscpaths -p tsconfig.json -s ./src -o ./dist/src",
     "lint": "eslint src tests",
     "test": "jest",

@@ -80,9 +80,9 @@ The backend service powering the AI features of the [Shortcut Assistant browser 
   yarn test:coverage
   ```
   
-- **Copy Migrations to dist folder:**
+- **Copy Migrations/Entities to dist folder:**
   ```sh
-  yarn build:copy-migrations
+  yarn build:copy-db-assets
   ```
 
 - **Replace `@sb/` paths in compiled files with absolute paths:**
