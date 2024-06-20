@@ -5,12 +5,13 @@
   "main": "dist/src/server.js",
   "scripts": {
     "start": "node dist/src/server.js",
-    "build": "tsc",
-    "dev": "ts-node-dev --transpile-only --loader ts-node/esm -r tsconfig-paths/register src/server.ts",
+    "start:dev": "ts-node-dev --transpile-only --loader ts-node/esm -r tsconfig-paths/register src/server.ts",
+    "build": "tsc && npm run build:copy-migrations && npm run build:replace-paths",
+    "build:copy-migrations": "copyfiles -u 1 src/migrations/**/*.ts dist/migrations",
+    "build:replace-paths": "tscpaths -p tsconfig.json -s ./src -o ./dist/src",
     "lint": "eslint src tests",
     "test": "jest",
-    "test-coverage": "jest --coverage --coverageDirectory=coverage",
-    "replace-paths": "tscpaths -p tsconfig.json -s ./src -o ./dist/src",
+    "test:coverage": "jest --coverage --coverageDirectory=coverage",
     "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js"
   },
   "dependencies": {

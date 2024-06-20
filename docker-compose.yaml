@@ -12,7 +12,7 @@ services:
       - db
     links:
       - db
-    command: npm run dev
+    command: npm run start:dev
 
   db:
     image: postgres:16

@@ -13,6 +13,5 @@ COPY . /app
 
 
 RUN yarn build
-RUN yarn run replace-paths
 
 CMD ["yarn", "start"]
