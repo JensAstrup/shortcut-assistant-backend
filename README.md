@@ -62,7 +62,7 @@ The backend service powering the AI features of the [Shortcut Assistant browser 
 
 - **Run the development server:**
   ```sh
-  yarn dev
+  yarn start:dev
   ```
 
 - **Lint the codebase:**
@@ -77,7 +77,12 @@ The backend service powering the AI features of the [Shortcut Assistant browser 
 
 - **Run tests with coverage:**
   ```sh
-  yarn test-coverage
+  yarn test:coverage
+  ```
+  
+- **Copy Migrations to dist folder:**
+  ```sh
+  yarn build:copy-migrations
   ```
 
 - **Replace `@sb/` paths in compiled files with absolute paths:**
