@@ -1,8 +1,8 @@
-import { logger } from '@sb/utils/logger'
 import { Response } from 'express'
 
 import { IncomingAnalyzeRequest, PromptType, prompts } from '@sb/types/prompt-request'
 import { StatusCodes } from '@sb/types/status-codes'
+import { logger } from '@sb/utils/logger'
 
 
 function parseIncomingRequest(req: IncomingAnalyzeRequest, res: Response): Record<string, string> | undefined {
@@ -18,13 +18,13 @@ function parseIncomingRequest(req: IncomingAnalyzeRequest, res: Response): Recor
     res.status(StatusCodes.BAD_REQUEST).json({ error: 'Both content and promptType are required fields' })
     return
   }
+  logger.info(`Received request with prompt type ${prompt_type}`)
   const prompt = prompts[prompt_type]
   if (!prompt) {
     res.status(StatusCodes.BAD_REQUEST).json({ error: 'Invalid prompt type' })
     return
   }
-  logger.debug(`content: ${content}`)
-  logger.debug(`prompt_type: ${prompt_type}`)
+  logger.info(`Parsed request with prompt type ${prompt_type}`)
   return { content, prompt }
 }
 

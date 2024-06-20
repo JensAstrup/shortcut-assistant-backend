@@ -41,7 +41,8 @@ describe('Logger', () => {
       hostname: 'datadog-agent',
       service: 'backend',
       ddsource: 'nodejs',
-      intakeRegion: 'us5'
+      intakeRegion: 'us5',
+      ddtags: `env:${process.env.NODE_ENV},version:${process.env.VERSION}`,
     })
 
     expect(logger.add).toHaveBeenCalledWith(expect.any(DatadogWinston))
