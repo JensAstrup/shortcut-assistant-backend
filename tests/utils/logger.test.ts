@@ -1,7 +1,7 @@
 import * as process from 'node:process'
 
 import DatadogWinston from 'datadog-winston'
-import { createLogger } from 'winston'
+import { createLogger, transports } from 'winston'
 
 
 jest.mock('datadog-winston')
@@ -27,6 +27,12 @@ jest.mock('winston', () => {
 jest.mock('../../package.json', () => ({
   version: '1.0.0'
 }))
+jest.mock('node:process', () => ({
+  env: {
+    DD_API_KEY: 'datadog-api-key',
+    NODE_ENV: 'development'
+  }
+}))
 
 import logger from '@sb/utils/logger'
 
@@ -41,11 +47,13 @@ describe('Logger', () => {
     expect(logger.format).toStrictEqual({ json: expect.any(Function) })
 
     expect(logger.defaultMeta).toEqual({ service: 'backend' })
+    expect(logger.add).toHaveBeenCalledTimes(2)
+    expect(transports.Console).toHaveBeenCalled()
   })
 
   it('should add DatadogWinston transport with the correct options', () => {
     expect(DatadogWinston).toHaveBeenCalledWith({
-      apiKey: process.env.DD_API_KEY,
+      apiKey: 'datadog-api-key',
       hostname: 'datadog-agent',
       service: 'backend',
       ddsource: 'nodejs',
