@@ -1,6 +1,6 @@
 {
   "name": "shortcut-assistant-backend",
-  "version": "3.1.0",
+  "version": "3.1.1",
   "description": "The backend service powering the Shortcut Assistant browser extension.",
   "main": "dist/src/server.js",
   "scripts": {
