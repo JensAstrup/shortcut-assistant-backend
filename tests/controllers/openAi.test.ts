@@ -56,4 +56,10 @@ describe('processAnalysis', () => {
     const { status } = await request(app).post('/api/openai').send({ content: 'test', promptType: 'analyze' })
     expect(status).toBe(200)
   })
+
+  it('properly sets headers and status', async () => {
+    const { headers, status } = await request(app).post('/api/openai').send({ content: 'test', promptType: 'analyze' })
+    expect(headers['content-type']).toBe('text/plain')
+    expect(status).toBe(200)
+  })
 })
