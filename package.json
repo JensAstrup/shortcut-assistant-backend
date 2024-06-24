@@ -1,6 +1,6 @@
 {
   "name": "shortcut-assistant-backend",
-  "version": "3.1.0",
+  "version": "3.1.1",
   "description": "The backend service powering the Shortcut Assistant browser extension.",
   "main": "dist/src/server.js",
   "scripts": {
@@ -17,6 +17,7 @@
   "dependencies": {
     "@sentry/node": "^8.9.2",
     "@sentry/profiling-node": "^8.9.2",
+    "cors": "^2.8.5",
     "datadog-winston": "^1.6.0",
     "dotenv": "^8.2.0",
     "express": "^4.19.2",
@@ -31,6 +32,7 @@
   },
   "devDependencies": {
     "@jens_astrup/tscpaths": "^0.0.11",
+    "@types/cors": "^2.8.17",
     "@types/datadog-winston": "^1.0.7",
     "@types/express": "^4.17.21",
     "@types/jest": "^29.5.12",

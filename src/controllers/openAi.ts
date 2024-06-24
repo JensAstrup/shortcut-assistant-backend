@@ -20,10 +20,14 @@ export default async function processAnalysis(req: IncomingAnalyzeRequest, res: 
       model: 'gpt-4o',
       stream: true
     })
+
+    res.setHeader('Content-Type', 'text/plain')
+    res.status(StatusCodes.OK)
+
     for await (const chunk of stream) {
       res.write(chunk.choices[0]?.delta?.content || '')
     }
-    res.status(StatusCodes.NO_CONTENT).end()
+    res.end()
   }
   catch (error: unknown) {
     if (error instanceof Error) {
