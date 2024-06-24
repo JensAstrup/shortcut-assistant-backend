@@ -10,8 +10,8 @@
     "build:copy-db-assets": "cp -r src/migrations dist/migrations && cp -r src/entities dist/entities",
     "build:replace-paths": "tscpaths -p tsconfig.json -s ./src -o ./dist/src",
     "lint": "eslint src tests",
-    "test": "jest",
-    "test:coverage": "jest --coverage --coverageDirectory=coverage",
+    "test": "NODE_ENV=test jest",
+    "test:coverage": "NODE_ENV=test jest --coverage --coverageDirectory=coverage",
     "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js"
   },
   "dependencies": {

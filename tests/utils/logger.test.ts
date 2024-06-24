@@ -1,3 +1,5 @@
+import * as process from 'node:process'
+
 import DatadogWinston from 'datadog-winston'
 import { createLogger } from 'winston'
 
@@ -16,9 +18,15 @@ jest.mock('winston', () => {
   return {
     createLogger: jest.fn().mockReturnValue(mLogger),
     format: mFormat,
-    Logger: jest.fn(() => mLogger)
+    Logger: jest.fn(() => mLogger),
+    transports: {
+      Console: jest.fn()
+    }
   }
 })
+jest.mock('../../package.json', () => ({
+  version: '1.0.0'
+}))
 
 import logger from '@sb/utils/logger'
 
@@ -42,7 +50,7 @@ describe('Logger', () => {
       service: 'backend',
       ddsource: 'nodejs',
       intakeRegion: 'us5',
-      ddtags: `env:${process.env.NODE_ENV},version:${process.env.VERSION}`,
+      ddtags: `env:${process.env.NODE_ENV},version:1.0.0`,
     })
 
     expect(logger.add).toHaveBeenCalledWith(expect.any(DatadogWinston))

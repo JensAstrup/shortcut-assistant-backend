@@ -14,7 +14,8 @@ const logger: Logger = createLogger({
   defaultMeta: { service: 'backend', version, environment },
 })
 
-if ((!environment.includes('production') && !environment.includes('staging')) || process.env.CONSOLE_LOGS === 'true') {
+const nonLoggingEnvironments = ['production', 'staging', 'test']
+if (!nonLoggingEnvironments.includes(environment) || process.env.CONSOLE_LOGS === 'true') {
   logger.add(new transports.Console())
 }
 
