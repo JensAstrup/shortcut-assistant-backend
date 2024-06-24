@@ -6,13 +6,14 @@ import { Logger, createLogger, format, transports } from 'winston'
 import { version } from '../../package.json'
 
 
+const environment = process.env.NODE_ENV || 'development'
+
 const logger: Logger = createLogger({
   level: 'debug',
   format: format.json(),
-  defaultMeta: { service: 'backend', version },
+  defaultMeta: { service: 'backend', version, environment },
 })
 
-const environment = process.env.NODE_ENV || 'development'
 if ((!environment.includes('production') && !environment.includes('staging')) || process.env.CONSOLE_LOGS === 'true') {
   logger.add(new transports.Console())
 }
