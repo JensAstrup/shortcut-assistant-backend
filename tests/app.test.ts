@@ -7,7 +7,7 @@ const mockApp = {
 const mockJson = jest.fn()
 const mockRouter = {
   post: jest.fn(),
-
+  get: jest.fn()
 }
 jest.mock('express', () => {
   return {
@@ -25,6 +25,7 @@ mockCors.mockReturnValue(jest.fn())
 jest.mock('@sentry/node')
 
 jest.mock('@sb/controllers/ai/analyze/analysis', () => jest.fn())
+jest.mock('@sb/controllers/ai/labels/controller', () => jest.fn())
 
 
 describe('app', () => {

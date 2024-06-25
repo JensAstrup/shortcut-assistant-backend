@@ -36,3 +36,4 @@ async function retrieveLabels(req: IncomingLabelRequest, res: Response): Promise
 }
 
 export default retrieveLabels
+export type { IncomingLabelRequest }
