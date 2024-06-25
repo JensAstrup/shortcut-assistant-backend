@@ -24,7 +24,7 @@ mockCors.mockReturnValue(jest.fn())
 
 jest.mock('@sentry/node')
 
-jest.mock('@sb/controllers/openAi', () => jest.fn())
+jest.mock('@sb/controllers/ai/analyze/analysis', () => jest.fn())
 
 
 describe('app', () => {

@@ -1,4 +1,4 @@
-import processAnalysis from '@sb/controllers/openAi'
+import processAnalysis from '@sb/controllers/ai/analyze/analysis'
 
 
 const mockRouter = {
@@ -10,7 +10,7 @@ jest.mock('express', () => ({
   Router: () => mockRouter,
 }))
 
-jest.mock('@sb/controllers/openAi', () => jest.fn())
+jest.mock('@sb/controllers/ai/analyze/analysis', () => jest.fn())
 
 describe('router', () => {
   it('should add a post route to /openai', () => {
