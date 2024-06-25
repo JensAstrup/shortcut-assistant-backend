@@ -6,16 +6,15 @@ import { Stream } from 'openai/streaming'
 
 import parseIncomingRequest from '@sb/controllers/ai/analyze/parse-incoming-request'
 import { IncomingAnalyzeRequest } from '@sb/types/prompt-request'
-
-import { StatusCodes } from '../types/status-codes'
+import { StatusCodes } from '@sb/types/status-codes'
 
 import ChatCompletionChunk = Chat.ChatCompletionChunk
 
 
-const openai = new OpenAI()
+const openAiClient = new OpenAI()
 
 
-export default async function processAnalysis(req: IncomingAnalyzeRequest, res: Response): Promise<void> {
+async function processAnalysis(req: IncomingAnalyzeRequest, res: Response): Promise<void> {
   const { content, prompt } = parseIncomingRequest(req, res) || {}
   if (!content || !prompt) {
     res.end()
@@ -23,7 +22,7 @@ export default async function processAnalysis(req: IncomingAnalyzeRequest, res: 
   }
   let stream: Stream<ChatCompletionChunk> | undefined
   try {
-    stream = await openai.chat.completions.create({
+    stream = await openAiClient.chat.completions.create({
       messages: [{ role: 'system', content: prompt }, { role: 'user', content: content }],
       model: 'gpt-4o',
       stream: true
@@ -50,3 +49,5 @@ export default async function processAnalysis(req: IncomingAnalyzeRequest, res: 
   }
   res.end()
 }
+
+export default processAnalysis
