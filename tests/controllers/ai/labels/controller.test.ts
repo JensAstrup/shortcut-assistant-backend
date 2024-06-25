@@ -25,7 +25,6 @@ describe('retrieveLabels', () => {
   let mockUser: User
   let mockStory: Partial<Story>
   let mockLabels: Partial<LabelInterface>[]
-  let mockClientInstance: jest.Mocked<Client>
 
   beforeEach(() => {
     req = {
@@ -57,8 +56,8 @@ describe('retrieveLabels', () => {
     ]
 
     mockGetUser.mockResolvedValue(mockUser)
-    // @ts-ignore
-    const MockClient = mockClient.mockImplementation(() => ({
+    // @ts-expect-error mockClient is a mock
+    mockClient.mockImplementation(() => ({
       headers: {},
       shortcutApiKey: '',
       stories: {
@@ -71,7 +70,6 @@ describe('retrieveLabels', () => {
       iterations: {}
     }))
     mockGetLabelsFromGPT.mockResolvedValue(['label1', 'label3'])
-    mockClientInstance = new MockClient() as jest.Mocked<Client>
   })
 
   it('should respond with UNAUTHORIZED if user is not found', async () => {
