@@ -28,7 +28,7 @@ describe('retrieveLabels', () => {
 
   beforeEach(() => {
     req = {
-      query: {
+      body: {
         googleId: 'test-google-id',
         storyId: 'test-story-id'
       }
@@ -85,7 +85,7 @@ describe('retrieveLabels', () => {
     await retrieveLabels(req, res as Response)
 
 
-    expect(logger.info).toHaveBeenCalledWith(`Retrieving labels for story ${req.query.storyId}`)
+    expect(logger.info).toHaveBeenCalledWith(`Retrieving labels for story ${req.body.storyId}`)
     expect(logger.info).toHaveBeenCalledWith(`User: ${mockUser.shortcutApiToken}`)
     expect(mockClient).toHaveBeenCalledWith(mockUser.shortcutApiToken)
 

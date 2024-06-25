@@ -5,6 +5,6 @@ import retrieveLabels from '@sb/controllers/ai/labels/controller'
 
 
 const labelsRouter = Router()
-labelsRouter.get('/', retrieveLabels)
+labelsRouter.post('/', retrieveLabels)
 
 export default labelsRouter
