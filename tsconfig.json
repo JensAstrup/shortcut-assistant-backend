@@ -8,6 +8,7 @@
     "forceConsistentCasingInFileNames": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
+    "resolveJsonModule": true,
     "strict": true,
     "strictPropertyInitialization": false,
     "skipLibCheck": true,

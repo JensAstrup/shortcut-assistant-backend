@@ -6,6 +6,7 @@ import cors from 'cors'
 import express, { Application, json } from 'express'
 
 import apiRouter from '@sb/routes/api'
+import labelsRouter from '@sb/routes/labels'
 import usersRouter from '@sb/routes/users'
 
 
@@ -20,6 +21,7 @@ app.use(json())
 // This is deprecated
 app.use('/api', apiRouter)
 app.use('/users', usersRouter)
+app.use('/labels', labelsRouter)
 
 Sentry.setupExpressErrorHandler(app)
 
