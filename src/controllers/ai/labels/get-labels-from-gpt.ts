@@ -1,4 +1,4 @@
-import OpenAI from 'openai'
+import { OpenAI } from 'openai'
 
 
 const BASE_SYSTEM_MESSAGE: string = 'You are an expert Product Manager tasked with labelling engineering issues. Given user stories or issues, '
