@@ -1,6 +1,6 @@
 import { Router } from 'express'
 
-import processAnalysis from '@sb/controllers/openAi'
+import processAnalysis from '@sb/controllers/ai/analyze/analysis'
 
 
 const router = Router()
