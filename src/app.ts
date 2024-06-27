@@ -5,6 +5,7 @@ import * as Sentry from '@sentry/node'
 import cors from 'cors'
 import express, { Application, json } from 'express'
 
+import requireAuth from '@sb/middleware/auth-headers'
 import apiRouter from '@sb/routes/api'
 import labelsRouter from '@sb/routes/labels'
 import usersRouter from '@sb/routes/users'
@@ -20,6 +21,7 @@ app.use(cors({
 app.use(json())
 // This is deprecated
 app.use('/api', apiRouter)
+app.use(requireAuth)
 app.use('/users', usersRouter)
 app.use('/labels', labelsRouter)
 
