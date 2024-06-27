@@ -1,12 +1,8 @@
-// Authenticate a user, creating them if they don't exist
-
 import { Request, Response } from 'express'
 
 import getUser from '@sb/controllers/users/utils/get-user'
-import database from '@sb/db'
 import { User } from '@sb/entities/User'
 import UserDoesNotExistError from '@sb/errors/user-does-not-exist'
-import user from '@sb/interfaces/User'
 import { StatusCodes } from '@sb/types/status-codes'
 import logger from '@sb/utils/logger'
 
@@ -17,7 +13,6 @@ interface IncomingAuthenticateRequest extends Request {
 }
 
 async function authenticate(request: IncomingAuthenticateRequest, response: Response): Promise<Response> {
-  // Check for existing user in DB using google token from request authorization header
   try {
     const user = await getUser(request.get('Authorization')!)
     return response.status(StatusCodes.OK).json({ id: user.id })
