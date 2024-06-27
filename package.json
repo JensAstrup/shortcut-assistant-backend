@@ -11,7 +11,7 @@
     "build:replace-paths": "tscpaths -p tsconfig.json -s ./src -o ./dist/src",
     "lint": "eslint src tests",
     "test": "NODE_ENV=test node --env-file .env.test node_modules/.bin/jest",
-    "test:coverage": "node --env-file .env.test jest --coverage --coverageDirectory=coverage",
+    "test:coverage": "node --env-file .env.test node_modules/.bin/jest --coverage --coverageDirectory=coverage",
     "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js"
   },
   "dependencies": {
