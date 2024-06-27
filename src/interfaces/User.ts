@@ -7,6 +7,7 @@ interface UserInterface {
     email: string
     shortcutApiToken: string
     googleId: string
+    googleAuthToken: string
     workspace?: WorkspaceInterface
     createdAt?: Date
     updatedAt?: Date

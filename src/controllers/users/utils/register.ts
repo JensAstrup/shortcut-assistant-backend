@@ -1,24 +1,44 @@
-import { ZodError, ZodType, z } from 'zod'
+import { Request } from 'express'
+import { TokenPayload } from 'google-auth-library'
+import { ZodError, z } from 'zod'
 
+import googleAuthenticate from '@sb/controllers/users/utils/google-authenticate'
 import database from '@sb/db'
 import { User } from '@sb/entities/User'
 import UserInterface from '@sb/interfaces/User'
 
 
 const ZodUser = z.object({
-  name: z.string(),
-  email: z.string().email(),
   shortcutApiToken: z.string(),
-  googleId: z.string(),
-}) satisfies ZodType<UserInterface>
+  googleToken: z.string(),
+})
 
 
-async function registerUserFromGoogle(userInfo: Record<string, string>): Promise<User | ZodError> {
+async function registerUserFromGoogle(request: Request): Promise<User | ZodError> {
+  let authenticatedPayload: TokenPayload
+  const userInfo = request.body
+
+  try {
+    authenticatedPayload = await googleAuthenticate(<string>request.headers.Authorization)
+  }
+  catch (error) {
+    if (error instanceof Error) {
+      throw error
+    }
+  }
+
   const userResult = ZodUser.safeParse(userInfo)
   if (!userResult.success) {
     return userResult.error
   }
-  return await database.manager.save(User, userResult.data)
+  const newUser: UserInterface = {
+    googleId: authenticatedPayload!.sub,
+    email: authenticatedPayload!.email || '',
+    name: authenticatedPayload!.name || '',
+    shortcutApiToken: userResult.data.shortcutApiToken,
+    googleAuthToken: userResult.data.googleToken,
+  }
+  return await database.manager.save(User, newUser)
 }
 
 export default registerUserFromGoogle

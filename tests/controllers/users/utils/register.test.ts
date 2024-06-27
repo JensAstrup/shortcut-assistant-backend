@@ -1,3 +1,4 @@
+import { Request } from 'express'
 import { ZodError } from 'zod'
 
 import registerUserFromGoogle from '@sb/controllers/users/utils/register'
@@ -31,14 +32,21 @@ describe('registerUserFromGoogle', () => {
       googleId: 'google123',
     }
 
-    const result = await registerUserFromGoogle(invalidUserInfo)
+    const request = { body: invalidUserInfo } as unknown as Request
+    const result = await registerUserFromGoogle(request)
     expect(result).toBeInstanceOf(ZodError)
   })
 
   it('should save the user to the database if userInfo is valid', async () => {
     (database.manager.save as jest.Mock).mockResolvedValue(mockUser)
-
-    const result = await registerUserFromGoogle(mockUser)
+    const validUserInfo = {
+      name: 'John Doe',
+      email: 'valid-email@email.com', // invalid email
+      shortcutApiToken: 'sometoken',
+      googleAuthToken: 'google123',
+    }
+    const request = { body: validUserInfo, heaaders: { Authorization: '213' } } as unknown as Request
+    const result = await registerUserFromGoogle(request)
     expect(result).toEqual(mockUser)
     expect(database.manager.save).toHaveBeenCalledWith(User, mockUser)
   })

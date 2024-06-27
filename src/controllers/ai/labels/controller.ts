@@ -9,14 +9,14 @@ import logger from '@sb/utils/logger'
 
 interface IncomingLabelRequest extends Request {
     body: {
-        googleId: string
+        googleAuthToken: string
         storyId: string
     }
 }
 
 
 async function retrieveLabels(req: IncomingLabelRequest, res: Response): Promise<void> {
-  const user = await getUser(req.body.googleId)
+  const user = await getUser(req.get('Authorization')!)
   if (!user) {
     res.status(StatusCodes.UNAUTHORIZED).json({ error: 'User not found' })
     return

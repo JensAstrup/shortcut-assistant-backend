@@ -97,6 +97,7 @@ The following environment variables are used in the application:
 - OPENAI_API_KEY: An OpenAI API key.
 - SENTRY_DSN: A Sentry DSN for error tracking.
 - DD_API_KEY: A Datadog API key for logging.
+- GOOGLE_CLIENT_ID: A Google OAuth client ID.
 - NODE_ENV: The environment in which the application is running (e.g., development, production).
 - DB_NAME: The name of the PostgreSQL database.
 - DB_USERNAME: The username for the PostgreSQL database.

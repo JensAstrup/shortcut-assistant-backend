@@ -1,20 +1,23 @@
 import { Request, Response } from 'express'
 
 import registerUserFromGoogle from '@sb/controllers/users/utils/register'
+import User from '@sb/interfaces/User'
 import { StatusCodes } from '@sb/types/status-codes'
 import logger from '@sb/utils/logger'
 
 
-async function register(request: Request, response: Response): Promise<void> {
-  const userInfo = request.body as Record<string, string>
+interface IncomingRegisterRequest extends Request {
+    body: Partial<User>
+}
 
+async function register(request: IncomingRegisterRequest, response: Response): Promise<void> {
   try {
-    const user = await registerUserFromGoogle(userInfo)
+    const user = await registerUserFromGoogle(request)
     if (user instanceof Error) {
       response.status(StatusCodes.BAD_REQUEST).json({ errors: user.format() })
       return
     }
-    response.status(StatusCodes.OK).send({ user })
+    response.status(StatusCodes.CREATED)
   }
   catch (e) {
     if (e instanceof Error) {
@@ -29,3 +32,4 @@ async function register(request: Request, response: Response): Promise<void> {
 }
 
 export default register
+export type { IncomingRegisterRequest }
