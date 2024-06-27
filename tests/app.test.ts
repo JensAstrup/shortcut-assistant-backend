@@ -26,6 +26,8 @@ jest.mock('@sentry/node')
 
 jest.mock('@sb/controllers/ai/analyze/analysis', () => jest.fn())
 jest.mock('@sb/controllers/ai/labels/controller', () => jest.fn())
+const mockAuthMiddleware = jest.fn()
+jest.mock('@sb/middleware/auth-headers', () => mockAuthMiddleware)
 
 
 describe('app', () => {
@@ -37,9 +39,13 @@ describe('app', () => {
       allowedHeaders: ['Content-Type', 'Authorization']
     })
     expect(mockApp.use).toHaveBeenCalledWith(mockJson)
+
     expect(mockApp.use.mock.calls[2][0]).toEqual('/api')
     expect(mockApp.use.mock.calls[2][1]).toEqual(mockRouter)
-    expect(mockApp.use.mock.calls[3][0]).toEqual('/users')
-    expect(mockApp.use.mock.calls[3][1]).toEqual(mockRouter)
+
+    expect(mockApp.use.mock.calls[3][0]).toEqual(mockAuthMiddleware)
+
+    expect(mockApp.use.mock.calls[4][0]).toEqual('/users')
+    expect(mockApp.use.mock.calls[4][1]).toEqual(mockRouter)
   })
 })
