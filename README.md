@@ -104,6 +104,7 @@ The following environment variables are used in the application:
 - DB_PASSWORD: The password for the PostgreSQL database.
 - DB_HOSTNAME: The hostname for the PostgreSQL database (set to db for Docker).
 - DB_PORT: The port on which the PostgreSQL database is running.
+- ENCRYPTION_KEY: A key used for encrypting and decrypting data.
 
 
 ## Deploying
