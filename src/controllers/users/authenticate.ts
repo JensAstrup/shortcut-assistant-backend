@@ -33,3 +33,4 @@ async function authenticate(request: IncomingAuthenticateRequest, response: Resp
 }
 
 export default authenticate
+export type { IncomingAuthenticateRequest }
