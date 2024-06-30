@@ -4,12 +4,11 @@ import { OAuth2Client, TokenPayload } from 'google-auth-library'
 import googleAuthenticate from '@sb/controllers/users/utils/google-authenticate'
 import logger from '@sb/utils/logger'
 
-// Mock dotenv to prevent actual config loading during tests
+
 jest.mock('dotenv', () => ({
   config: jest.fn(),
 }))
 
-// Mock the Google Auth Library
 jest.mock('google-auth-library', () => ({
   OAuth2Client: jest.fn().mockImplementation(() => ({
     verifyIdToken: jest.fn().mockReturnValue(Promise.resolve({ getPayload: jest.fn() }))
@@ -17,12 +16,10 @@ jest.mock('google-auth-library', () => ({
 }))
 const mockOAuth2Client = OAuth2Client as jest.MockedClass<typeof OAuth2Client>
 
-// Mock the logger
 jest.mock('@sb/utils/logger', () => ({
   error: jest.fn(),
 }))
 
-// Load environment variables
 dotenv.config()
 
 describe('googleAuthenticate', () => {
@@ -85,7 +82,7 @@ describe('googleAuthenticate', () => {
   })
 
   test('logs and throws error if verifyIdToken throws an error without message', async () => {
-    const error = new Error() // Proper Error object without message
+    const error = new Error()
     const mockVerifyIdToken = mockClient.verifyIdToken as jest.Mock
     mockVerifyIdToken.mockRejectedValue(error)
 
