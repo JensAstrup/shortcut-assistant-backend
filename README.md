@@ -98,13 +98,13 @@ The following environment variables are used in the application:
 - SENTRY_DSN: A Sentry DSN for error tracking.
 - DD_API_KEY: A Datadog API key for logging.
 - GOOGLE_CLIENT_ID: A Google OAuth client ID.
+- ENCRYPTION_KEY: A key used for encrypting and decrypting data.
 - NODE_ENV: The environment in which the application is running (e.g., development, production).
 - DB_NAME: The name of the PostgreSQL database.
 - DB_USERNAME: The username for the PostgreSQL database.
 - DB_PASSWORD: The password for the PostgreSQL database.
 - DB_HOSTNAME: The hostname for the PostgreSQL database (set to db for Docker).
 - DB_PORT: The port on which the PostgreSQL database is running.
-- ENCRYPTION_KEY: A key used for encrypting and decrypting data.
 
 
 ## Deploying
