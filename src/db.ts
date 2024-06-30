@@ -1,10 +1,7 @@
 import { join } from 'path'
 
-import { config } from 'dotenv'
 import { DataSource } from 'typeorm'
 
-
-config()
 
 // I really do not like this solution for handling the paths, any suggestions?
 const isDevelopment = process.env.NODE_ENV === 'development'

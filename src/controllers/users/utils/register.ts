@@ -1,5 +1,4 @@
 import { Request } from 'express'
-import { TokenPayload } from 'google-auth-library'
 import { ZodError, z } from 'zod'
 
 import googleAuthenticate from '@sb/controllers/users/utils/google-authenticate'
@@ -10,33 +9,23 @@ import UserInterface from '@sb/interfaces/User'
 
 const ZodUser = z.object({
   shortcutApiToken: z.string(),
-  googleAuthToken: z.string(),
 })
 
 
 async function registerUserFromGoogle(request: Request): Promise<User | ZodError> {
-  let authenticatedPayload: TokenPayload
   const userInfo = request.body
 
-  try {
-    authenticatedPayload = await googleAuthenticate(<string>request.headers.Authorization)
-  }
-  catch (error) {
-    if (error instanceof Error) {
-      throw error
-    }
-  }
-
   const userResult = ZodUser.safeParse(userInfo)
+  const authenticatedPayload = await googleAuthenticate(request.headers.authorization!)
   if (!userResult.success) {
     return userResult.error
   }
   const newUser: UserInterface = {
-    googleId: authenticatedPayload!.sub,
-    email: authenticatedPayload!.email || '',
-    name: authenticatedPayload!.name || '',
+    googleId: authenticatedPayload.sub,
+    email: authenticatedPayload.email || '',
+    name: authenticatedPayload.name || '',
     shortcutApiToken: userResult.data.shortcutApiToken,
-    googleAuthToken: userResult.data.googleAuthToken,
+    googleAuthToken: request.headers.authorization!,
   }
   return await database.manager.save(User, newUser)
 }

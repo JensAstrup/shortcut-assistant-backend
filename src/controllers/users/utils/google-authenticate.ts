@@ -1,31 +1,36 @@
-import dotenv from 'dotenv'
-import { OAuth2Client, TokenPayload } from 'google-auth-library'
-
 import logger from '@sb/utils/logger'
 
 
-dotenv.config()
+interface GoogleUserInfo {
+    email: string
+    email_verified: boolean
+    family_name: string
+    given_name: string
+    locale: string
+    name: string
+    picture: string
+    sub: string
+}
 
 
-
-async function googleAuthenticate(googleToken: string): Promise<TokenPayload> {
-  const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID)
-
-  if (!googleToken) {
+async function googleAuthenticate(token: string): Promise<GoogleUserInfo> {
+  if (!token) {
     throw new Error ('Token is required')
   }
 
   try {
-    const ticket = await client.verifyIdToken({
-      idToken: googleToken,
-      audience: process.env.GOOGLE_CLIENT_ID
+    const userInfoResponse = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
     })
-
-    const payload = ticket.getPayload()
-    if (!payload) {
-      throw new Error('Unable to get payload from token')
+    if (!userInfoResponse.ok) {
+      logger.error('Failed to fetch user info', userInfoResponse.status)
+      throw new Error('Failed to fetch user info')
     }
-    return payload
+
+    const userInfo = await userInfoResponse.json()
+    return userInfo as GoogleUserInfo
   }
   catch (error) {
     if (error instanceof Error && error.message) {
@@ -33,10 +38,11 @@ async function googleAuthenticate(googleToken: string): Promise<TokenPayload> {
       throw error
     }
     else {
-      logger.error('Error verifying googleToken', error)
+      logger.error('Error verifying token', error)
       throw error
     }
   }
 }
 
 export default googleAuthenticate
+export type { GoogleUserInfo }

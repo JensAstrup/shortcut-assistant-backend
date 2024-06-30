@@ -1,92 +1,69 @@
-import dotenv from 'dotenv'
-import { OAuth2Client, TokenPayload } from 'google-auth-library'
-
-import googleAuthenticate from '@sb/controllers/users/utils/google-authenticate'
+import googleAuthenticate, { GoogleUserInfo } from '@sb/controllers/users/utils/google-authenticate'
 import logger from '@sb/utils/logger'
 
 
-jest.mock('dotenv', () => ({
-  config: jest.fn(),
-}))
-
-jest.mock('google-auth-library', () => ({
-  OAuth2Client: jest.fn().mockImplementation(() => ({
-    verifyIdToken: jest.fn().mockReturnValue(Promise.resolve({ getPayload: jest.fn() }))
-  }))
-}))
-const mockOAuth2Client = OAuth2Client as jest.MockedClass<typeof OAuth2Client>
-
+// Mocking fetch and logger
 jest.mock('@sb/utils/logger', () => ({
   error: jest.fn(),
 }))
-
-dotenv.config()
+global.fetch = jest.fn()
 
 describe('googleAuthenticate', () => {
-  const googleToken = 'test-google-token'
-  const mockClient = new OAuth2Client()
-  const mockTicket = {
-    getPayload: jest.fn(),
-  }
-  const mockPayload: TokenPayload = {
-    sub: '1234567890',
+  const token = 'valid_token'
+  const userInfo: GoogleUserInfo = {
     email: 'test@example.com',
     email_verified: true,
-    name: 'Test User',
-    iss: 'accounts.google.com',
-    given_name: 'Test',
-    family_name: 'User',
+    family_name: 'Doe',
+    given_name: 'John',
     locale: 'en',
-    aud: 'test-client-id',
-    iat: 1234567890,
-    exp: 1234567890,
+    name: 'John Doe',
+    picture: 'https://example.com/johndoe.jpg',
+    sub: '1234567890'
   }
-
-  mockOAuth2Client.mockImplementation(() => mockClient)
 
   beforeEach(() => {
     jest.clearAllMocks()
-    process.env.GOOGLE_CLIENT_ID = 'test-client-id'
-    const mockVerifyIdToken = mockClient.verifyIdToken as jest.Mock
-    mockVerifyIdToken.mockResolvedValue(mockTicket)
   })
 
-  test('throws error if token is not provided', async () => {
+  it('should throw an error when token is not provided', async () => {
     await expect(googleAuthenticate('')).rejects.toThrow('Token is required')
   })
 
-  test('throws error if payload is null', async () => {
-    const mockVerifyIdToken = mockClient.verifyIdToken as jest.Mock
-    mockVerifyIdToken.mockResolvedValue({
-      getPayload: () => null,
+  it('should throw an error when fetch fails with a non-200 status', async () => {
+    (fetch as jest.Mock).mockResolvedValue({
+      ok: false,
     })
-    await expect(googleAuthenticate(googleToken)).rejects.toThrow('Unable to get payload from token')
+
+    await expect(googleAuthenticate(token)).rejects.toThrow('Failed to fetch user info')
   })
 
-  test('returns payload if token is valid', async () => {
-    const mockVerifyIdToken = mockClient.verifyIdToken as jest.Mock
-    mockVerifyIdToken.mockResolvedValue({
-      getPayload: () => mockPayload,
+  it('should return user info when fetch succeeds', async () => {
+    (fetch as jest.Mock).mockResolvedValue({
+      ok: true,
+      json: jest.fn().mockResolvedValue(userInfo),
     })
-    const result = await googleAuthenticate(googleToken)
-    expect(result).toEqual(mockPayload)
+
+    const result = await googleAuthenticate(token)
+    expect(result).toEqual(userInfo)
   })
 
-  test('logs and throws error if verifyIdToken throws an error with message', async () => {
-    const error = new Error('Verification error')
-    const mockVerifyIdToken = mockClient.verifyIdToken as jest.Mock
-    mockVerifyIdToken.mockRejectedValue(error)
+  it('should log error and throw when fetch fails with an error having a message', async () => {
+    const errorMessage = 'Network error'
+    const error = new Error(errorMessage)
 
-    await expect(googleAuthenticate(googleToken)).rejects.toThrow('Verification error')
-    expect(logger.error).toHaveBeenCalledWith('Verification error', error)
+    ;(fetch as jest.Mock).mockRejectedValue(error)
+
+    await expect(googleAuthenticate(token)).rejects.toThrow(errorMessage)
+    expect(logger.error).toHaveBeenCalledWith(errorMessage, error)
   })
 
-  test('logs and throws error if verifyIdToken throws an error without message', async () => {
+  it('should log error and throw when fetch fails with an error without a message', async () => {
+    const mockFetch = fetch as jest.MockedFunction<typeof fetch>
     const error = new Error()
-    const mockVerifyIdToken = mockClient.verifyIdToken as jest.Mock
-    mockVerifyIdToken.mockRejectedValue(error)
 
-    await expect(googleAuthenticate(googleToken)).rejects.toThrow()
-    expect(logger.error).toHaveBeenCalledWith('Error verifying googleToken', error)
+    mockFetch.mockRejectedValue(error)
+
+    await expect(googleAuthenticate(token)).rejects.toThrow(error)
+    expect(logger.error).toHaveBeenCalledWith('Error verifying token', error)
   })
 })
