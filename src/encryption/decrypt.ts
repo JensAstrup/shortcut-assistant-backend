@@ -1,3 +1,5 @@
+import * as CryptoJS from 'crypto-js'
+
 import ConfigurationError from '@sb/errors/configuration'
 
 

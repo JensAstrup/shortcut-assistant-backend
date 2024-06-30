@@ -1,4 +1,4 @@
-import * as CryptoJS from 'crypto-js'
+import { AES } from 'crypto-js'
 
 import ConfigurationError from '@sb/errors/configuration'
 
@@ -10,7 +10,7 @@ if (KEY === undefined) {
 }
 
 function encrypt(data: string): string {
-  return CryptoJS.AES.encrypt(data, KEY!).toString()
+  return AES.encrypt(data, KEY!).toString()
 }
 
 export default encrypt
