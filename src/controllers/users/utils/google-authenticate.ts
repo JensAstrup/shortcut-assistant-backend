@@ -6,10 +6,11 @@ import logger from '@sb/utils/logger'
 
 dotenv.config()
 
-const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID)
 
 
 async function googleAuthenticate(googleToken: string): Promise<TokenPayload> {
+  const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID)
+
   if (!googleToken) {
     throw new Error ('Token is required')
   }
