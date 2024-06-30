@@ -28,6 +28,7 @@ describe('register', () => {
     const response = { status: jest.fn().mockReturnThis(), json: jest.fn() }
     // @ts-expect-error request and response are mocked
     await register(request, response)
+    expect(response.status).toHaveBeenCalledWith(StatusCodes.CREATED)
   })
 
   it('should return a 500 status if an unknown error occurs', async () => {
