@@ -32,8 +32,9 @@ describe('retrieveLabels', () => {
         googleAuthToken: 'test-google-id',
         storyId: 'test-story-id'
       },
+      get: jest.fn().mockReturnValue('123'),
       headers: { Authorization: '123' }
-    } as IncomingLabelRequest
+    } as unknown as IncomingLabelRequest
     res = {
       status: jest.fn().mockReturnThis(),
       json: jest.fn()

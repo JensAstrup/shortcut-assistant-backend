@@ -12,13 +12,13 @@ jest.mock('@sb/db', () => {
     shortcutApiToken: 'test-token'
   } as User
   const mockUserRepository = {
-    findOneBy: jest.fn().mockResolvedValue(mockUser)
+    findOne: jest.fn().mockResolvedValue(mockUser)
   } as unknown as Repository<User>
 
   const mockDatabase = {
     getRepository: jest.fn().mockReturnValue(mockUserRepository)
   }
-  return { getRepository: mockDatabase.getRepository, mockUserRepository }
+  return { getRepository: mockDatabase.getRepository, database: mockDatabase }
 })
 
 

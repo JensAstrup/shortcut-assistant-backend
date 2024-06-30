@@ -27,7 +27,7 @@ async function googleAuthenticate(googleToken: string): Promise<TokenPayload> {
     return payload
   }
   catch (error) {
-    if (error instanceof Error) {
+    if (error instanceof Error && error.message) {
       logger.error(error.message, error)
       throw error
     }
