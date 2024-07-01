@@ -19,7 +19,6 @@ async function authenticate(request: IncomingAuthenticateRequest, response: Resp
     return response.status(StatusCodes.OK).json({ id: user.id, key: encryptedKey })
   }
   catch (e) {
-    console.log(e)
     if (e instanceof UserDoesNotExistError) {
       return response.status(StatusCodes.NOT_FOUND).json({ error: 'User not found' })
     }
