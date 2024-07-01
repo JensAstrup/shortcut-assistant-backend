@@ -40,7 +40,6 @@ describe('registerUserFromGoogle', () => {
     }
 
     const headers = { authorization: '213' }
-
     const request = { body: invalidUserInfo, headers } as unknown as Request
     const result = await registerUserFromGoogle(request)
     expect(result).toBeInstanceOf(ZodError)
