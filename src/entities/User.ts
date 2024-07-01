@@ -17,10 +17,7 @@ export class User implements UserInterface {
   @Column({ unique: true })
     email: string
 
-  @Column({ transformer: {
-    to: (value: string) => encrypt(value),
-    from: (value: string) => decrypt(value),
-  } })
+  @Column()
     shortcutApiToken: string
 
   @Column({ transformer: {

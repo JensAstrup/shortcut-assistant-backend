@@ -9,6 +9,7 @@ import UserInterface from '@sb/interfaces/User'
 
 const ZodUser = z.object({
   shortcutApiToken: z.string(),
+  googleAuthToken: z.string(),
 })
 
 
@@ -20,12 +21,14 @@ async function registerUserFromGoogle(request: Request): Promise<User | ZodError
   if (!userResult.success) {
     return userResult.error
   }
+
+  console.log('shortcuthere', userResult.data.shortcutApiToken)
   const newUser: UserInterface = {
     googleId: authenticatedPayload.sub,
     email: authenticatedPayload.email || '',
     name: authenticatedPayload.name || '',
     shortcutApiToken: userResult.data.shortcutApiToken,
-    googleAuthToken: request.headers.authorization!,
+    googleAuthToken: userResult.data.googleAuthToken,
   }
   return await database.manager.save(User, newUser)
 }

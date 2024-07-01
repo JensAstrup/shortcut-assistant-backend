@@ -16,7 +16,7 @@ interface IncomingLabelRequest extends Request {
 
 
 async function retrieveLabels(req: IncomingLabelRequest, res: Response): Promise<void> {
-  const user = await getUser(req.get('Authorization')!)
+  const user = await getUser(req.headers.authorization!)
   if (!user) {
     res.status(StatusCodes.UNAUTHORIZED).json({ error: 'User not found' })
     return
