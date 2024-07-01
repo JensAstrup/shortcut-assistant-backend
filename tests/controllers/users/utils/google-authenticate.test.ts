@@ -2,7 +2,6 @@ import googleAuthenticate, { GoogleUserInfo } from '@sb/controllers/users/utils/
 import logger from '@sb/utils/logger'
 
 
-// Mocking fetch and logger
 jest.mock('@sb/utils/logger', () => ({
   error: jest.fn(),
 }))
