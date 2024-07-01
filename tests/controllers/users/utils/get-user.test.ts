@@ -43,15 +43,13 @@ describe('getUser', () => {
       shortcutApiToken: 'test-token'
     })
   })
+
   it('should throw an error if the user does not exist, but matches alternate ID', async () => {
     const googleId = 'test-google-id'
     const mockUserRepository = {
       findOne: jest.fn().mockResolvedValueOnce(null).mockResolvedValueOnce(null),
       save: jest.fn(),
     } as unknown as Repository<User>
-    const mockDatabase = {
-      getRepository: jest.fn().mockReturnValue(mockUserRepository),
-    };
 
     (database.getRepository as jest.Mock).mockReturnValue(mockUserRepository);
     (googleAuthenticate as jest.Mock).mockResolvedValue({ sub: googleId })
@@ -63,15 +61,13 @@ describe('getUser', () => {
     expect(mockUserRepository.findOne).toHaveBeenCalledWith({ where: { googleAuthToken } })
     expect(mockUserRepository.findOne).toHaveBeenCalledWith({ where: { googleId: googleId } })
   })
+
   it('should throw an error if the user does not exist and can not be found with alternative ID', async () => {
     const googleId = 'test-google-id'
     const mockUserRepository = {
       findOne: jest.fn().mockResolvedValueOnce(null).mockResolvedValueOnce(null),
       save: jest.fn(),
     } as unknown as Repository<User>
-    const mockDatabase = {
-      getRepository: jest.fn().mockReturnValue(mockUserRepository),
-    };
 
     (database.getRepository as jest.Mock).mockReturnValue(mockUserRepository);
     (googleAuthenticate as jest.Mock).mockResolvedValue({ sub: googleId })
