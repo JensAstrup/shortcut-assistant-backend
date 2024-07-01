@@ -1,5 +1,6 @@
 import { Request, Response } from 'express'
 import { Logger } from 'winston'
+import { ZodError, ZodIssue } from 'zod'
 
 import register, { IncomingRegisterRequest } from '@sb/controllers/users/register'
 import registerUserFromGoogle from '@sb/controllers/users/utils/register'
@@ -32,6 +33,18 @@ describe('register', () => {
     await register(request, response)
     expect(response.status).toHaveBeenCalledWith(StatusCodes.CREATED)
     expect(response.json).toHaveBeenCalledWith({ id: 123, key: 'encrypted-token' })
+  })
+
+  it('should return a 400 status with errors if registration fails', async () => {
+    const error = new ZodError([{ message: 'Invalid email', fatal: true } as ZodIssue])
+    error.format = jest.fn().mockReturnValue('formatted error')
+    error.name = 'ZodError'
+    mockRegisterUserFromGoogle.mockResolvedValueOnce(error)
+    const request = { body: { email: '' } } as unknown as Request
+    const response = { status: jest.fn().mockReturnThis(), json: jest.fn() } as unknown as Response
+    await register(request, response)
+    expect(response.status).toHaveBeenCalledWith(StatusCodes.BAD_REQUEST)
+    expect(response.json).toHaveBeenCalledWith({ errors: 'formatted error' })
   })
 
   it('should return a 500 status if an unknown error occurs', async () => {

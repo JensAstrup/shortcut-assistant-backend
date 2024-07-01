@@ -17,7 +17,6 @@ async function register(request: IncomingRegisterRequest, response: Response): P
   try {
     const user = await registerUserFromGoogle(request)
     if (user instanceof Error) {
-      console.log('a')
       response.status(StatusCodes.BAD_REQUEST).json({ errors: user.format() })
       return
     }
