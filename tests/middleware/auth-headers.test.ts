@@ -1,3 +1,9 @@
+import { Request, Response } from 'express'
+
+import authMiddleware from '@sb/middleware/auth-headers'
+import { StatusCodes } from '@sb/types/status-codes'
+
+
 describe('authMiddleware', () => {
   it('should return a 401 if the authorization header is missing', () => {
     const request = { headers: {} } as unknown as Request
