@@ -25,10 +25,6 @@ describe('googleAuthenticate', () => {
     jest.clearAllMocks()
   })
 
-  it('should throw an error when token is not provided', async () => {
-    await expect(googleAuthenticate('')).rejects.toThrow('Token is required')
-  })
-
   it('should throw an error when fetch fails with a non-200 status', async () => {
     (fetch as jest.Mock).mockResolvedValue({
       ok: false,

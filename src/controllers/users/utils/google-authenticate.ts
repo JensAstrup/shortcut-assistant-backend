@@ -14,10 +14,6 @@ interface GoogleUserInfo {
 
 
 async function googleAuthenticate(token: string): Promise<GoogleUserInfo> {
-  if (!token) {
-    throw new Error ('Token is required')
-  }
-
   try {
     const userInfoResponse = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
       headers: {
