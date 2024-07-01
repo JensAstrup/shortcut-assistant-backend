@@ -13,7 +13,7 @@ jest.mock('express', () => {
   return {
     __esModule: true,
     default: jest.fn().mockReturnValue(mockApp),
-    json: jest.fn(() => mockJson), // Mock express.json
+    json: jest.fn(() => mockJson),
     Router: jest.fn(() => mockRouter)
   }
 })

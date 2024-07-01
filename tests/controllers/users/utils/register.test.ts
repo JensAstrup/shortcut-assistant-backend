@@ -4,8 +4,12 @@ import { ZodError } from 'zod'
 import googleAuthenticate, { GoogleUserInfo } from '@sb/controllers/users/utils/google-authenticate'
 import registerUserFromGoogle from '@sb/controllers/users/utils/register'
 import database from '@sb/db'
+import encrypt from '@sb/encryption/encrypt'
 import { User } from '@sb/entities/User'
 
+
+jest.mock('@sb/encryption/encrypt')
+const mockEncrypt = encrypt as jest.Mock
 
 jest.mock('@sb/db', () => ({
   manager: {
@@ -49,11 +53,14 @@ describe('registerUserFromGoogle', () => {
       name: 'John Doe',
       email: 'john.doe@example.com', // invalid email
       shortcutApiToken: 'sometoken',
+      googleAuthToken: 'google123',
     }
+
+    mockEncrypt.mockReturnValue('encrypted-token')
 
     const expectedSaveData = {
       ...mockUser,
-      googleAuthToken: '213',
+      shortcutApiToken: 'encrypted-token',
     }
     const googleUser = {
       sub: 'google321',

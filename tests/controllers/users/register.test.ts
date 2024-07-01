@@ -3,6 +3,8 @@ import { Logger } from 'winston'
 
 import register, { IncomingRegisterRequest } from '@sb/controllers/users/register'
 import registerUserFromGoogle from '@sb/controllers/users/utils/register'
+import encrypt from '@sb/encryption/encrypt'
+import { User } from '@sb/entities/User'
 import { StatusCodes } from '@sb/types/status-codes'
 import logger from '@sb/utils/logger'
 
@@ -11,11 +13,10 @@ jest.mock('@sb/controllers/users/utils/register', () => jest.fn())
 jest.mock('@sb/utils/logger')
 jest.mock('@sb/controllers/users/utils/register')
 jest.mock('@sb/controllers/users/utils/google-authenticate')
-jest.mock('@sb/encryption/encrypt', () => ({
-  encrypt: jest.fn().mockResolvedValue('encrypted-token')
-}))
+jest.mock('@sb/encryption/encrypt')
 const mockLogger = logger as jest.Mocked<Logger>
 const mockRegisterUserFromGoogle = registerUserFromGoogle as jest.MockedFunction<typeof registerUserFromGoogle>
+const mockEncrypt = encrypt as jest.MockedFunction<typeof encrypt>
 
 
 describe('register', () => {
@@ -24,19 +25,20 @@ describe('register', () => {
   })
 
   it('should return a 200 response with the user if registration is successful', async () => {
+    mockRegisterUserFromGoogle.mockResolvedValueOnce({ id: 123, shortcutApiToken: 'test-token' } as unknown as User)
+    mockEncrypt.mockReturnValueOnce('encrypted-token')
     const request = { body: { email: '' } } as unknown as Request
-    const response = { status: jest.fn().mockReturnThis(), json: jest.fn() }
-    // @ts-expect-error request and response are mocked
+    const response = { status: jest.fn().mockReturnThis(), json: jest.fn() } as unknown as Response
     await register(request, response)
     expect(response.status).toHaveBeenCalledWith(StatusCodes.CREATED)
+    expect(response.json).toHaveBeenCalledWith({ id: 123, key: 'encrypted-token' })
   })
 
   it('should return a 500 status if an unknown error occurs', async () => {
     mockRegisterUserFromGoogle.mockRejectedValueOnce(new Error('Unknown error'))
 
     const request = { body: { email: '' } } as unknown as Request
-    const response = { status: jest.fn().mockReturnThis(), json: jest.fn() }
-    // @ts-expect-error request and response are mocked
+    const response = { status: jest.fn().mockReturnThis(), json: jest.fn() } as unknown as Response
     await expect(register(request, response)).resolves.toBeUndefined()
     expect(response.status).toHaveBeenCalledWith(StatusCodes.SERVER_ERROR)
     expect(response.json).toHaveBeenCalledWith({ error: 'A server error occurred' })

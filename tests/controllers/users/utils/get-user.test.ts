@@ -54,11 +54,9 @@ describe('getUser', () => {
     (database.getRepository as jest.Mock).mockReturnValue(mockUserRepository);
     (googleAuthenticate as jest.Mock).mockResolvedValue({ sub: googleId })
 
-    const googleAuthToken = 'test-google-id-2'
-    await expect(getUser(googleAuthToken)).rejects.toThrow(UserDoesNotExistError)
-    expect(googleAuthenticate).toHaveBeenCalledWith(googleAuthToken)
-    expect(mockUserRepository.findOne).toHaveBeenCalledTimes(2)
-    expect(mockUserRepository.findOne).toHaveBeenCalledWith({ where: { googleAuthToken } })
-    expect(mockUserRepository.findOne).toHaveBeenCalledWith({ where: { googleId: googleId } })
+    const encryptedHeader = 'test-id-2'
+    await expect(getUser(encryptedHeader)).rejects.toThrow(UserDoesNotExistError)
+    expect(mockUserRepository.findOne).toHaveBeenCalledTimes(1)
+    expect(mockUserRepository.findOne).toHaveBeenCalledWith({ where: { shortcutApiToken: 'test-id-2' } })
   })
 })

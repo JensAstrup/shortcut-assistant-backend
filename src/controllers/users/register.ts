@@ -1,3 +1,5 @@
+import * as console from 'node:console'
+
 import { Request, Response } from 'express'
 
 import registerUserFromGoogle from '@sb/controllers/users/utils/register'
@@ -15,6 +17,7 @@ async function register(request: IncomingRegisterRequest, response: Response): P
   try {
     const user = await registerUserFromGoogle(request)
     if (user instanceof Error) {
+      console.log('a')
       response.status(StatusCodes.BAD_REQUEST).json({ errors: user.format() })
       return
     }
@@ -23,12 +26,10 @@ async function register(request: IncomingRegisterRequest, response: Response): P
   }
   catch (e) {
     if (e instanceof Error) {
-      logger.error('a')
       logger.error(e.message)
       response.status(StatusCodes.SERVER_ERROR).json({ error: 'A server error occurred' })
     }
     else {
-      logger.error('b')
       logger.error(`An unknown error occurred: ${e}`)
       response.status(StatusCodes.SERVER_ERROR).json({ error: 'An unknown error occurred' })
     }

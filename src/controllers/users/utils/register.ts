@@ -3,6 +3,7 @@ import { ZodError, z } from 'zod'
 
 import googleAuthenticate from '@sb/controllers/users/utils/google-authenticate'
 import database from '@sb/db'
+import encrypt from '@sb/encryption/encrypt'
 import { User } from '@sb/entities/User'
 import UserInterface from '@sb/interfaces/User'
 
@@ -22,12 +23,14 @@ async function registerUserFromGoogle(request: Request): Promise<User | ZodError
     return userResult.error
   }
 
-  console.log('shortcuthere', userResult.data.shortcutApiToken)
+  const shortcutApiToken: string = userResult.data.shortcutApiToken
+  const encryptedToken = encrypt(shortcutApiToken)
+
   const newUser: UserInterface = {
     googleId: authenticatedPayload.sub,
     email: authenticatedPayload.email || '',
     name: authenticatedPayload.name || '',
-    shortcutApiToken: userResult.data.shortcutApiToken,
+    shortcutApiToken: encryptedToken,
     googleAuthToken: userResult.data.googleAuthToken,
   }
   return await database.manager.save(User, newUser)
