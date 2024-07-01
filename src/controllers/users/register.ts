@@ -1,5 +1,3 @@
-import * as console from 'node:console'
-
 import { Request, Response } from 'express'
 
 import registerUserFromGoogle from '@sb/controllers/users/utils/register'
