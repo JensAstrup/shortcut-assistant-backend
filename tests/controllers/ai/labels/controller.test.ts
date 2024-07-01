@@ -29,10 +29,12 @@ describe('retrieveLabels', () => {
   beforeEach(() => {
     req = {
       body: {
-        googleId: 'test-google-id',
+        googleAuthToken: 'test-google-id',
         storyId: 'test-story-id'
-      }
-    } as IncomingLabelRequest
+      },
+      get: jest.fn().mockReturnValue('123'),
+      headers: { Authorization: '123' }
+    } as unknown as IncomingLabelRequest
     res = {
       status: jest.fn().mockReturnThis(),
       json: jest.fn()

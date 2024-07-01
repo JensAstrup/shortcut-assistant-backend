@@ -1,7 +1,13 @@
 import { Repository } from 'typeorm'
 
 import getUser from '@sb/controllers/users/utils/get-user'
+import googleAuthenticate from '@sb/controllers/users/utils/google-authenticate'
+import database from '@sb/db'
 import { User } from '@sb/entities/User'
+import UserDoesNotExistError from '@sb/errors/user-does-not-exist'
+
+
+jest.mock('@sb/controllers/users/utils/google-authenticate', () => jest.fn())
 
 
 jest.mock('@sb/db', () => {
@@ -12,13 +18,13 @@ jest.mock('@sb/db', () => {
     shortcutApiToken: 'test-token'
   } as User
   const mockUserRepository = {
-    findOneBy: jest.fn().mockResolvedValue(mockUser)
+    findOne: jest.fn().mockResolvedValue(mockUser)
   } as unknown as Repository<User>
 
   const mockDatabase = {
     getRepository: jest.fn().mockReturnValue(mockUserRepository)
   }
-  return { getRepository: mockDatabase.getRepository, mockUserRepository }
+  return { getRepository: mockDatabase.getRepository, database: mockDatabase }
 })
 
 
@@ -36,5 +42,21 @@ describe('getUser', () => {
       email: 'test-email',
       shortcutApiToken: 'test-token'
     })
+  })
+
+  it('should throw an error if the user does not exist', async () => {
+    const googleId = 'test-google-id'
+    const mockUserRepository = {
+      findOne: jest.fn().mockResolvedValueOnce(null).mockResolvedValueOnce(null),
+      save: jest.fn(),
+    } as unknown as Repository<User>
+
+    (database.getRepository as jest.Mock).mockReturnValue(mockUserRepository);
+    (googleAuthenticate as jest.Mock).mockResolvedValue({ sub: googleId })
+
+    const encryptedHeader = 'test-id-2'
+    await expect(getUser(encryptedHeader)).rejects.toThrow(UserDoesNotExistError)
+    expect(mockUserRepository.findOne).toHaveBeenCalledTimes(1)
+    expect(mockUserRepository.findOne).toHaveBeenCalledWith({ where: { shortcutApiToken: 'test-id-2' } })
   })
 })
