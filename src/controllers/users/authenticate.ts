@@ -1,5 +1,3 @@
-import * as console from 'node:console'
-
 import { Request, Response } from 'express'
 
 import getUser from '@sb/controllers/users/utils/get-user'
@@ -8,7 +6,6 @@ import { User } from '@sb/entities/User'
 import UserDoesNotExistError from '@sb/errors/user-does-not-exist'
 import { StatusCodes } from '@sb/types/status-codes'
 import logger from '@sb/utils/logger'
-
 
 
 interface IncomingAuthenticateRequest extends Request {
