@@ -5,9 +5,8 @@ services:
       - "3000:3000"
     volumes:
       - .:/app
-    environment:
-      - NODE_ENV=development
-      - PORT=3000
+    env_file:
+      - .env.local
     depends_on:
       - db
     links:
