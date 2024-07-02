@@ -25,6 +25,8 @@ app.use('/users', noAuthUsersRouter)
 app.use(authMiddleware)
 app.use('/labels', labelsRouter)
 
-Sentry.setupExpressErrorHandler(app)
+if (process.env.NODE_ENV !== 'development') {
+  Sentry.setupExpressErrorHandler(app)
+}
 
 export default app
