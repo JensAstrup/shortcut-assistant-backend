@@ -16,7 +16,7 @@ jest.mock('@sb/controllers/users/authenticate', () => jest.fn())
 
 describe('router', () => {
   it('should add a post route to /openai', () => {
-    require('@sb/routes/users') // Import the module here after the mock
+    require('@sb/routes/users')
 
     expect(mockRouter.post).toHaveBeenCalledWith('/register', register)
     expect(mockRouter.post).toHaveBeenCalledWith('/authenticate', authenticate)
