@@ -15,15 +15,15 @@ const ZodUser = z.object({
 
 
 async function registerUserFromGoogle(request: Request): Promise<User | ZodError> {
-  const userInfo = request.body
+  const requestBody: { shortcutApiToken: string, googleAuthToken: string } = request.body
 
-  const userResult = ZodUser.safeParse(userInfo)
-  const authenticatedPayload = await googleAuthenticate(request.headers.authorization!)
+  const userResult = ZodUser.safeParse(requestBody)
+  const authenticatedPayload = await googleAuthenticate(requestBody.googleAuthToken)
   if (!userResult.success) {
     return userResult.error
   }
 
-  const shortcutApiToken: string = userResult.data.shortcutApiToken
+  const shortcutApiToken: string = requestBody.shortcutApiToken
   const encryptedToken = encrypt(shortcutApiToken)
 
   const newUser: UserInterface = {
