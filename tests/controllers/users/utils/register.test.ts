@@ -48,9 +48,7 @@ describe('registerUserFromGoogle', () => {
   it('should save the user to the database if userInfo is valid', async () => {
     const mockSave = database.manager.save as jest.Mock
     mockSave.mockResolvedValue(mockUser)
-    const validUserInfo = {
-      name: 'John Doe',
-      email: 'john.doe@example.com', // invalid email
+    const requestBody = {
       shortcutApiToken: 'sometoken',
       googleAuthToken: 'google123',
     }
@@ -67,9 +65,11 @@ describe('registerUserFromGoogle', () => {
       name: 'John Doe' } as GoogleUserInfo
     mockGoogleAuthenticate.mockResolvedValue(googleUser)
 
-    const request = { body: validUserInfo, headers: { authorization: '213' } } as unknown as Request
+    const request = { body: requestBody, headers: { authorization: requestBody.shortcutApiToken } } as unknown as Request
     const result = await registerUserFromGoogle(request)
     expect(result).toEqual(mockUser)
     expect(database.manager.save).toHaveBeenCalledWith(User, expectedSaveData)
+    expect(encrypt).toHaveBeenCalledWith('sometoken')
+    expect(googleAuthenticate).toHaveBeenCalledWith('google123')
   })
 })
