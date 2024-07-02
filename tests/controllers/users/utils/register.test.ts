@@ -52,11 +52,6 @@ describe('registerUserFromGoogle', () => {
       shortcutApiToken: 'sometoken',
       googleAuthToken: 'google123',
     }
-    const validUserInfo = {
-      name: 'John Doe',
-      email: 'john.doe@example.com',
-      ...requestBody,
-    }
 
     mockEncrypt.mockReturnValue('encrypted-token')
 
