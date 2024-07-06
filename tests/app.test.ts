@@ -1,3 +1,4 @@
+import * as Sentry from '@sentry/node'
 import cors from 'cors'
 
 
@@ -17,6 +18,8 @@ jest.mock('express', () => {
     Router: jest.fn(() => mockRouter)
   }
 })
+
+const mockSentrySetup = jest.spyOn(Sentry, 'setupExpressErrorHandler').mockImplementation(jest.fn())
 
 jest.mock('cors', () => jest.fn())
 const mockCors = cors as jest.MockedFunction<typeof cors>
@@ -38,14 +41,22 @@ describe('app', () => {
       methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
       allowedHeaders: ['Content-Type', 'Authorization']
     })
-    expect(mockApp.use).toHaveBeenCalledWith(mockJson)
+
+    expect(mockApp.use.mock.calls[0][0]).toEqual(mockCors.mock.results[0].value)
+
+    expect(mockApp.use.mock.calls[1][0]).toEqual(mockJson)
 
     expect(mockApp.use.mock.calls[2][0]).toEqual('/api')
     expect(mockApp.use.mock.calls[2][1]).toEqual(mockRouter)
 
-    expect(mockApp.use.mock.calls[3][0]).toEqual(mockAuthMiddleware)
+    expect(mockApp.use.mock.calls[3][0]).toEqual('/users')
+    expect(mockApp.use.mock.calls[3][1]).toEqual(mockRouter)
 
-    expect(mockApp.use.mock.calls[4][0]).toEqual('/users')
-    expect(mockApp.use.mock.calls[4][1]).toEqual(mockRouter)
+    expect(mockApp.use.mock.calls[4][0]).toEqual(mockAuthMiddleware)
+
+    expect(mockApp.use.mock.calls[5][0]).toEqual('/labels')
+    expect(mockApp.use.mock.calls[5][1]).toEqual(mockRouter)
+
+    expect(mockSentrySetup).toHaveBeenCalledWith(mockApp)
   })
 })

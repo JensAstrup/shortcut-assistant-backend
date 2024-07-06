@@ -4,7 +4,9 @@ import authenticate from '@sb/controllers/users/authenticate'
 import register from '@sb/controllers/users/register'
 
 
-const usersRouter = Router()
-usersRouter.post('/register', register)
-usersRouter.post('/authenticate', authenticate)
-export default usersRouter
+// NOTE that authentication middleware is applied *after* the usersRouter in src/app.ts
+// This means that any routes defined in usersRouter will not be protected by the authMiddleware
+const noAuthUsersRouter = Router()
+noAuthUsersRouter.post('/register', register)
+noAuthUsersRouter.post('/authenticate', authenticate)
+export default noAuthUsersRouter

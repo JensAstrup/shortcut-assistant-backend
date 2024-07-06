@@ -14,7 +14,7 @@ jest.mock('@sb/controllers/ai/analyze/analysis', () => jest.fn())
 
 describe('router', () => {
   it('should add a post route to /openai', () => {
-    require('@sb/routes/api') // Import the module here after the mock
+    require('@sb/routes/api')
 
     expect(mockRouter.post).toHaveBeenCalledWith('/openai', processAnalysis)
   })
