@@ -18,12 +18,11 @@ interface IncomingLabelRequest extends Request {
 
 
 async function retrieveLabels(req: IncomingLabelRequest, res: Response): Promise<void> {
-  let user: User | undefined = undefined
+  let user: User | undefined
   try {
     user = await getUser(req.headers.authorization!)
   }
   catch (e) {
-    logger.debug(req.headers.authorization!)
     if (e instanceof UserDoesNotExistError && e.message === 'User does not exist') {
       res.status(StatusCodes.UNAUTHORIZED).json({ error: 'User not found' })
     }
