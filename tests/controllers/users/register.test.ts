@@ -4,7 +4,6 @@ import { ZodError, ZodIssue } from 'zod'
 
 import register, { IncomingRegisterRequest } from '@sb/controllers/users/register'
 import registerUserFromGoogle from '@sb/controllers/users/utils/register'
-import encrypt from '@sb/encryption/encrypt'
 import { User } from '@sb/entities/User'
 import { StatusCodes } from '@sb/types/status-codes'
 import logger from '@sb/utils/logger'
@@ -17,7 +16,6 @@ jest.mock('@sb/controllers/users/utils/google-authenticate')
 jest.mock('@sb/encryption/encrypt')
 const mockLogger = logger as jest.Mocked<Logger>
 const mockRegisterUserFromGoogle = registerUserFromGoogle as jest.MockedFunction<typeof registerUserFromGoogle>
-const mockEncrypt = encrypt as jest.MockedFunction<typeof encrypt>
 
 
 describe('register', () => {
