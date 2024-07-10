@@ -27,12 +27,11 @@ describe('register', () => {
 
   it('should return a 200 response with the user if registration is successful', async () => {
     mockRegisterUserFromGoogle.mockResolvedValueOnce({ id: 123, shortcutApiToken: 'test-token' } as unknown as User)
-    mockEncrypt.mockReturnValueOnce('encrypted-token')
     const request = { body: { email: '' } } as unknown as Request
     const response = { status: jest.fn().mockReturnThis(), json: jest.fn() } as unknown as Response
     await register(request, response)
     expect(response.status).toHaveBeenCalledWith(StatusCodes.CREATED)
-    expect(response.json).toHaveBeenCalledWith({ id: 123, key: 'encrypted-token' })
+    expect(response.json).toHaveBeenCalledWith({ id: 123, key: 'test-token' })
   })
 
   it('should return a 400 status with errors if registration fails', async () => {
