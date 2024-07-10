@@ -6,6 +6,8 @@ import { DataSource } from 'typeorm'
 // I really do not like this solution for handling the paths, any suggestions?
 const isDevelopment = process.env.NODE_ENV === 'development'
 const rootPath = isDevelopment ? 'src' : 'dist'
+const migrationsPath = join(__dirname, '..', rootPath, 'migrations', '**', '*.{ts,js}')
+console.log('migrationsPath', migrationsPath)
 
 const database = new DataSource({
   type: 'postgres',
@@ -16,7 +18,7 @@ const database = new DataSource({
   database: process.env.DB_NAME,
   port: parseInt(<string>process.env.DB_PORT),
   ssl: process.env.NODE_ENV === 'development' ? false : { rejectUnauthorized: false },
-  migrations: [join(__dirname, '..', rootPath, 'migrations', '**', '*.{ts,js}')],
+  migrations: [migrationsPath],
   entities: [join(__dirname, '..', rootPath, 'entities', '**', '*.{ts,js}')],
 })
 
