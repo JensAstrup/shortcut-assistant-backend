@@ -5,7 +5,7 @@ import { DataSource } from 'typeorm'
 
 // I really do not like this solution for handling the paths, any suggestions?
 const isDevelopment = process.env.NODE_ENV === 'development'
-const rootPath = isDevelopment ? 'src' : 'dist'
+const rootPath = isDevelopment ? 'src' : ''
 const migrationsPath = join(__dirname, '..', rootPath, 'migrations', '**', '*.{ts,js}')
 console.log('migrationsPath', migrationsPath)
 
