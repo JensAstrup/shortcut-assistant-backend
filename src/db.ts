@@ -7,7 +7,8 @@ import { DataSource } from 'typeorm'
 config()
 
 const isDevelopment = process.env.NODE_ENV === 'development'
-const basePath = isDevelopment ? 'src' : 'dist'
+const entitiesPath = isDevelopment ? 'src/entities/**/*.ts' : 'dist/entities/**/*.js'
+const migrationsPath = isDevelopment ? 'src/migrations/**/*.ts' : 'dist/migrations/**/*.js'
 
 const dataSource = new DataSource({
   type: 'postgres',
@@ -17,8 +18,8 @@ const dataSource = new DataSource({
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
   ssl: isDevelopment ? false : { rejectUnauthorized: false },
-  entities: [join(__dirname, `../${basePath}/entities/**/*.{ts,js}`)],
-  migrations: [join(__dirname, `../${basePath}/migrations/**/*.{ts,js}`)],
+  entities: [entitiesPath],
+  migrations: [migrationsPath],
   logging: true,
 })
 
