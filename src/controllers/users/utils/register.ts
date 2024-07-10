@@ -13,7 +13,6 @@ const ZodUser = z.object({
   googleAuthToken: z.string(),
 })
 
-
 async function registerUserFromGoogle(request: Request): Promise<User | ZodError> {
   const requestBody: { shortcutApiToken: string, googleAuthToken: string } = request.body
 
@@ -23,17 +22,24 @@ async function registerUserFromGoogle(request: Request): Promise<User | ZodError
     return userResult.error
   }
 
-  const shortcutApiToken: string = requestBody.shortcutApiToken
-  const encryptedToken = encrypt(shortcutApiToken)
+  const existingUser = await database.getRepository(User).findOne({
+    where: { googleId: authenticatedPayload.sub },
+  })
 
-  const newUser: UserInterface = {
-    googleId: authenticatedPayload.sub,
-    email: authenticatedPayload.email || '',
-    name: authenticatedPayload.name || '',
-    shortcutApiToken: encryptedToken,
-    googleAuthToken: userResult.data.googleAuthToken,
+  if (existingUser) {
+    existingUser.shortcutApiToken = encrypt(requestBody.shortcutApiToken)
+    return await database.manager.save(User, existingUser)
   }
-  return await database.manager.save(User, newUser)
+  else {
+    const newUser: UserInterface = {
+      googleId: authenticatedPayload.sub,
+      email: authenticatedPayload.email || '',
+      name: authenticatedPayload.name || '',
+      shortcutApiToken: encrypt(requestBody.shortcutApiToken),
+      googleAuthToken: requestBody.googleAuthToken,
+    }
+    return await database.manager.save(User, newUser)
+  }
 }
 
 export default registerUserFromGoogle

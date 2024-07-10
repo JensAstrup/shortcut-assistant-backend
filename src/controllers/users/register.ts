@@ -1,7 +1,6 @@
 import { Request, Response } from 'express'
 
 import registerUserFromGoogle from '@sb/controllers/users/utils/register'
-import encrypt from '@sb/encryption/encrypt'
 import User from '@sb/interfaces/User'
 import { StatusCodes } from '@sb/types/status-codes'
 import logger from '@sb/utils/logger'
@@ -18,7 +17,7 @@ async function register(request: IncomingRegisterRequest, response: Response): P
       response.status(StatusCodes.BAD_REQUEST).json({ errors: user.format() })
       return
     }
-    const encryptedKey = encrypt(user.shortcutApiToken)
+    const encryptedKey = user.shortcutApiToken
     response.status(StatusCodes.CREATED).json({ id: user.id, key: encryptedKey })
   }
   catch (e) {
