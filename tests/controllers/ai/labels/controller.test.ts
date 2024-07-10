@@ -6,6 +6,7 @@ import getLabelsFromGPT from '@sb/controllers/ai/labels/get-labels-from-gpt'
 import getUser from '@sb/controllers/users/utils/get-user'
 import decrypt from '@sb/encryption/decrypt'
 import { User } from '@sb/entities/User'
+import UserDoesNotExistError from '@sb/errors/user-does-not-exist'
 import { StatusCodes } from '@sb/types/status-codes'
 import logger from '@sb/utils/logger'
 
@@ -75,6 +76,24 @@ describe('retrieveLabels', () => {
       iterations: {}
     }))
     mockGetLabelsFromGPT.mockResolvedValue(['label1', 'label3'])
+  })
+
+  it('should respond with UNAUTHORIZED if getUser throws an error', async () => {
+    mockGetUser.mockRejectedValue(new UserDoesNotExistError())
+
+    await retrieveLabels(req, res as Response)
+
+    expect(res.status).toHaveBeenCalledWith(StatusCodes.UNAUTHORIZED)
+    expect(res.json).toHaveBeenCalledWith({ error: 'User not found' })
+  })
+
+  it('should respond with SERVER_ERROR if getUser throws an unknown error', async () => {
+    mockGetUser.mockRejectedValue(new Error('Test error'))
+
+    await retrieveLabels(req, res as Response)
+
+    expect(res.status).toHaveBeenCalledWith(StatusCodes.SERVER_ERROR)
+    expect(res.json).toHaveBeenCalledWith({ error: 'A server error occurred' })
   })
 
   it('should respond with UNAUTHORIZED if user is not found', async () => {

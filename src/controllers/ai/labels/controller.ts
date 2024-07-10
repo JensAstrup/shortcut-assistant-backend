@@ -27,6 +27,10 @@ async function retrieveLabels(req: IncomingLabelRequest, res: Response): Promise
     if (e instanceof UserDoesNotExistError && e.message === 'User does not exist') {
       res.status(StatusCodes.UNAUTHORIZED).json({ error: 'User not found' })
     }
+    else {
+      logger.error(e)
+      res.status(StatusCodes.SERVER_ERROR).json({ error: 'A server error occurred' })
+    }
     return
   }
   if (!user) {
