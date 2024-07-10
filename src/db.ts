@@ -8,10 +8,11 @@ const isDevelopment = process.env.NODE_ENV === 'development'
 const rootPath = isDevelopment ? 'src' : ''
 const migrationsPath = join(__dirname, '..', rootPath, 'migrations', '**', '*.{ts,js}')
 console.log('migrationsPath', migrationsPath)
+const entitiesPath = join(__dirname, '..', rootPath, 'entities', '**', '*.{ts,js}')
+console.log('entitiesPath', entitiesPath)
 
 const database = new DataSource({
   type: 'postgres',
-  synchronize: true,
   username: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,
   host: process.env.DB_HOSTNAME,
@@ -19,7 +20,7 @@ const database = new DataSource({
   port: parseInt(<string>process.env.DB_PORT),
   ssl: process.env.NODE_ENV === 'development' ? false : { rejectUnauthorized: false },
   migrations: [migrationsPath],
-  entities: [join(__dirname, '..', rootPath, 'entities', '**', '*.{ts,js}')],
+  entities: [entitiesPath],
 })
 
 export default database
