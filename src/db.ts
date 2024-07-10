@@ -5,7 +5,7 @@ import { DataSource } from 'typeorm'
 
 // I really do not like this solution for handling the paths, any suggestions?
 const isDevelopment = process.env.NODE_ENV === 'development'
-const rootPath = isDevelopment ? 'src' : 'dist/src'
+const rootPath = isDevelopment ? 'src' : 'dist'
 
 const database = new DataSource({
   type: 'postgres',
