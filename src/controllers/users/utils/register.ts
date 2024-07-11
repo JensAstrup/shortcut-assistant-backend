@@ -21,7 +21,6 @@ async function registerUserFromGoogle(request: Request): Promise<User | ZodError
   if (!userResult.success) {
     return userResult.error
   }
-  await database.initialize()
   const existingUser = await database.getRepository(User).findOne({
     where: { googleId: authenticatedPayload.sub },
   })
