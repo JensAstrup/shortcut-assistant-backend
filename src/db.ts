@@ -2,6 +2,10 @@ import { join } from 'path'
 
 import { DataSource } from 'typeorm'
 
+import { User } from '@sb/entities/User'
+import { Workspace } from '@sb/entities/Workspace'
+
+
 // Define base paths for different environments
 const basePath = process.env.BASE_PATH || (__dirname.includes('dist') ? join(__dirname, '../dist') : join(__dirname, '../src'))
 
@@ -16,7 +20,7 @@ const database = new DataSource({
   port: parseInt(<string>process.env.DB_PORT),
   ssl: process.env.NODE_ENV === 'development' ? false : { rejectUnauthorized: false },
   migrations: [getPath('migrations')],
-  entities: [getPath('entities')],
+  entities: [User, Workspace],
 })
 
 database.initialize()
