@@ -7,7 +7,6 @@
     "start": "node dist/src/server.js",
     "start:dev": "ts-node-dev --env-file .env.local --transpile-only --loader ts-node/esm -r tsconfig-paths/register src/server.ts",
     "build": "tsc && npm run build:replace-paths",
-    "build:copy-db-assets": "cp -r src/migrations dist/migrations && cp -r src/entities dist/entities",
     "build:replace-paths": "tscpaths -p tsconfig.json -s ./src -o ./dist/src",
     "lint": "eslint src tests",
     "test": "NODE_ENV=test node --env-file .env.test node_modules/.bin/jest",
