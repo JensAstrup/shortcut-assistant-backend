@@ -19,7 +19,7 @@ const database = new DataSource({
   database: process.env.DB_NAME,
   port: parseInt(<string>process.env.DB_PORT),
   ssl: process.env.NODE_ENV === 'development' ? false : { rejectUnauthorized: false },
-  migrations: [getPath('migrations')],
+  migrations: ['src/migrations/**/*'],
   entities: [User, Workspace],
 })
 
