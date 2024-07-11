@@ -19,4 +19,6 @@ const database = new DataSource({
   entities: [getPath('entities')],
 })
 
+database.initialize()
+
 export default database
