@@ -19,10 +19,8 @@ const database = new DataSource({
   database: process.env.DB_NAME,
   port: parseInt(<string>process.env.DB_PORT),
   ssl: process.env.NODE_ENV === 'development' ? false : { rejectUnauthorized: false },
-  migrations: ['src/migrations/**/*'],
+  migrations: ['dist/src/migrations/**/*'],
   entities: [User, Workspace],
 })
-
-database.initialize()
 
 export default database

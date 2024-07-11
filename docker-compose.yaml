@@ -11,7 +11,7 @@ services:
       - db
     links:
       - db
-    command: npm run start:dev
+    command: npm run start
 
   db:
     image: postgres:16
