@@ -19,5 +19,6 @@ const database = new DataSource({
   synchronize: isDevelopment, // Optionally auto-sync schema in development
   logging: isDevelopment, // Enable logging in development
 })
+database.initialize()
 
 export default database
