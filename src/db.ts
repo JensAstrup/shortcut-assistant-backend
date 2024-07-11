@@ -1,5 +1,3 @@
-import { join } from 'path'
-
 import { DataSource } from 'typeorm'
 
 import { User } from '@sb/entities/User'
@@ -7,9 +5,8 @@ import { Workspace } from '@sb/entities/Workspace'
 
 
 // Define base paths for different environments
-const basePath = process.env.BASE_PATH || (__dirname.includes('dist') ? join(__dirname, '../dist') : join(__dirname, '../src'))
+const basePath = process.env.BASE_PATH || (__dirname.includes('dist') ? 'dist/src' : 'src')
 
-const getPath = (folder: string): string => join(basePath, folder, '**', '*.{ts,js}')
 
 const database = new DataSource({
   type: 'postgres',
@@ -19,7 +16,7 @@ const database = new DataSource({
   database: process.env.DB_NAME,
   port: parseInt(<string>process.env.DB_PORT),
   ssl: process.env.NODE_ENV === 'development' ? false : { rejectUnauthorized: false },
-  migrations: ['dist/src/migrations/**/*'],
+  migrations: [`${basePath}/migrations/**/*`],
   entities: [User, Workspace],
 })
 
