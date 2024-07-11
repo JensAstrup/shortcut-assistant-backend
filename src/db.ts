@@ -2,10 +2,10 @@ import { join } from 'path'
 
 import { DataSource } from 'typeorm'
 
+// Define base paths for different environments
+const basePath = process.env.BASE_PATH || (__dirname.includes('dist') ? join(__dirname, '../dist') : join(__dirname, '../src'))
 
-// I really do not like this solution for handling the paths, any suggestions?
-const isDevelopment = process.env.NODE_ENV === 'development'
-const getPath = (folder: string): string => join(__dirname, isDevelopment ? '../src' : '../dist', folder, '**', '*.{ts,js}')
+const getPath = (folder: string): string => join(basePath, folder, '**', '*.{ts,js}')
 
 const database = new DataSource({
   type: 'postgres',
