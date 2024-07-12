@@ -14,7 +14,7 @@
     "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js"
   },
   "dependencies": {
-    "@sentry/node": "^8.9.2",
+    "@sentry/node": "^8.17.0",
     "@sentry/profiling-node": "^8.9.2",
     "cors": "^2.8.5",
     "crypto-js": "^4.2.0",
