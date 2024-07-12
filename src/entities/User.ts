@@ -6,7 +6,7 @@ import { Workspace } from '@sb/entities/Workspace'
 import UserInterface from '@sb/interfaces/User'
 
 
-@Entity()
+@Entity({ name: 'auth_users' })
 export class User implements UserInterface {
   @PrimaryGeneratedColumn()
     id: number

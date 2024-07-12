@@ -45,7 +45,39 @@ describe('registerUserFromGoogle', () => {
     expect(result).toBeInstanceOf(ZodError)
   })
 
+  it('should update the user in the database if userInfo is valid and user exists', async () => {
+    const mockGetRepository = { findOne: jest.fn().mockReturnValue(mockUser) }
+    database.getRepository = jest.fn().mockReturnValue(mockGetRepository)
+    const mockSave = database.manager.save as jest.Mock
+    mockSave.mockResolvedValue(mockUser)
+    const requestBody = {
+      shortcutApiToken: 'some-new-token',
+      googleAuthToken: 'google123',
+    }
+
+    mockEncrypt.mockReturnValue('encrypted-token')
+
+    const expectedSaveData = {
+      ...mockUser,
+      shortcutApiToken: 'encrypted-token',
+    }
+    const googleUser = {
+      sub: 'google321',
+      email: 'john.doe@example.com',
+      name: 'John Doe' } as GoogleUserInfo
+    mockGoogleAuthenticate.mockResolvedValue(googleUser)
+
+    const request = { body: requestBody, headers: { authorization: requestBody.shortcutApiToken } } as unknown as Request
+    const result = await registerUserFromGoogle(request)
+    expect(result).toEqual(mockUser)
+    expect(database.manager.save).toHaveBeenCalledWith(User, expectedSaveData)
+    expect(encrypt).toHaveBeenCalledWith('some-new-token')
+    expect(googleAuthenticate).toHaveBeenCalledWith('google123')
+  })
+
   it('should save the user to the database if userInfo is valid', async () => {
+    const mockGetRepository = { findOne: jest.fn().mockReturnValue(null) }
+    database.getRepository = jest.fn().mockReturnValue(mockGetRepository)
     const mockSave = database.manager.save as jest.Mock
     mockSave.mockResolvedValue(mockUser)
     const requestBody = {

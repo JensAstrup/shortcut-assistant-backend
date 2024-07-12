@@ -4,7 +4,9 @@ import { Client, LabelInterface, Story } from 'shortcut-api'
 import retrieveLabels, { IncomingLabelRequest } from '@sb/controllers/ai/labels/controller'
 import getLabelsFromGPT from '@sb/controllers/ai/labels/get-labels-from-gpt'
 import getUser from '@sb/controllers/users/utils/get-user'
+import decrypt from '@sb/encryption/decrypt'
 import { User } from '@sb/entities/User'
+import UserDoesNotExistError from '@sb/errors/user-does-not-exist'
 import { StatusCodes } from '@sb/types/status-codes'
 import logger from '@sb/utils/logger'
 
@@ -13,10 +15,12 @@ jest.mock('@sb/controllers/users/utils/get-user')
 jest.mock('shortcut-api')
 jest.mock('@sb/controllers/ai/labels/get-labels-from-gpt')
 jest.mock('@sb/utils/logger')
+jest.mock('@sb/encryption/decrypt')
 
 const mockGetUser = getUser as jest.MockedFunction<typeof getUser>
 const mockClient = Client as jest.MockedClass<typeof Client>
 const mockGetLabelsFromGPT = getLabelsFromGPT as jest.MockedFunction<typeof getLabelsFromGPT>
+const mockDecrypt = decrypt as jest.MockedFunction<typeof decrypt>
 
 
 describe('retrieveLabels', () => {
@@ -74,6 +78,24 @@ describe('retrieveLabels', () => {
     mockGetLabelsFromGPT.mockResolvedValue(['label1', 'label3'])
   })
 
+  it('should respond with UNAUTHORIZED if getUser throws an error', async () => {
+    mockGetUser.mockRejectedValue(new UserDoesNotExistError())
+
+    await retrieveLabels(req, res as Response)
+
+    expect(res.status).toHaveBeenCalledWith(StatusCodes.UNAUTHORIZED)
+    expect(res.json).toHaveBeenCalledWith({ error: 'User not found' })
+  })
+
+  it('should respond with SERVER_ERROR if getUser throws an unknown error', async () => {
+    mockGetUser.mockRejectedValue(new Error('Test error'))
+
+    await retrieveLabels(req, res as Response)
+
+    expect(res.status).toHaveBeenCalledWith(StatusCodes.SERVER_ERROR)
+    expect(res.json).toHaveBeenCalledWith({ error: 'A server error occurred' })
+  })
+
   it('should respond with UNAUTHORIZED if user is not found', async () => {
     (getUser as jest.Mock).mockResolvedValue(null)
 
@@ -84,12 +106,14 @@ describe('retrieveLabels', () => {
   })
 
   it('should retrieve and set labels on the story', async () => {
+    mockDecrypt.mockReturnValue('test-decrypted-token')
+
     await retrieveLabels(req, res as Response)
 
 
     expect(logger.info).toHaveBeenCalledWith(`Retrieving labels for story ${req.body.storyId}`)
     expect(logger.info).toHaveBeenCalledWith(`User: ${mockUser.shortcutApiToken}`)
-    expect(mockClient).toHaveBeenCalledWith(mockUser.shortcutApiToken)
+    expect(mockClient).toHaveBeenCalledWith('test-decrypted-token')
 
     expect(getLabelsFromGPT).toHaveBeenCalledWith(['label1', 'label2', 'label3'], 'test description')
     expect(mockStory.labels).toEqual([mockLabels[0], mockLabels[2]])
