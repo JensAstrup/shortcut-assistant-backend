@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@sentry/node": "^8.9.2",
-    "@sentry/profiling-node": "^8.9.2",
+    "@sentry/profiling-node": "^8.17.0",
     "cors": "^2.8.5",
     "crypto-js": "^4.2.0",
     "datadog-winston": "^1.6.0",
