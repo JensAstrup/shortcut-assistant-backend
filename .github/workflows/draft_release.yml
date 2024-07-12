@@ -1,0 +1,107 @@
+name: Release Version
+
+on:
+  pull_request:
+    branches:
+      - main
+    types:
+      - opened
+      - closed
+      - synchronize
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  draft_release:
+    runs-on: ubuntu-latest
+    outputs:
+      release_id: ${{ steps.create_or_update_draft_release.outputs.release_id }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '21'
+
+      - name: Install dependencies
+        run: cd src && yarn
+
+      - name: Extract tag name
+        id: extract_tag
+        run: |
+          echo "VERSION=${{ github.event.pull_request.title }}" >> $GITHUB_ENV
+
+      - name: Create or update draft release
+        id: create_or_update_draft_release
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const { owner, repo } = context.repo;
+            const pr = context.payload.pull_request;
+            const releaseTag = pr.title;
+            const releaseNotes = pr.body;
+            const releases = await github.rest.repos.listReleases({
+              owner,
+              repo,
+            });
+            let draftRelease = releases.data.find(release => release.tag_name === releaseTag && release.draft === true);
+            if (!draftRelease) {
+              console.log(`Creating draft release`);
+              draftRelease = await github.rest.repos.createRelease({
+                owner,
+                repo,
+                tag_name: releaseTag,
+                name: releaseTag,
+                body: releaseNotes,
+                draft: true,
+              });
+              console.log(`Draft release created`);
+            } else {
+              console.log(`Updating draft release`);
+              draftRelease = await github.rest.repos.updateRelease({
+                owner,
+                repo,
+                release_id: draftRelease.id,
+                body: releaseNotes,
+                draft: true,
+              });
+              console.log(`Draft release updated`);
+            }
+            core.setOutput("release_id", draftRelease.id);
+
+  publish_release:
+    needs: draft_release
+    runs-on: ubuntu-latest
+    if: ${{ github.event.pull_request.merged == true }}
+    steps:
+      - name: Publish release
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const { owner, repo } = context.repo;
+            const pr = context.payload.pull_request;
+            const releases = await github.rest.repos.listReleases({
+              owner,
+              repo,
+            });
+            const releaseTag = pr.title;
+            let draftRelease = releases.data.find(release => release.tag_name === releaseTag && release.draft === true);
+            if (draftRelease) {
+              const releaseId = draftRelease.id;
+              console.log(`Releasing draft release: https://github.com/${owner}/${repo}/releases/tag/${releaseTag}`);
+              await github.rest.repos.updateRelease({
+                owner,
+                repo,
+                release_id: releaseId,
+                draft: false,
+              });
+              console.log(`Release published`);
+            } else {
+              console.log(`No draft release found for tag: ${releaseTag}`);
+            }
