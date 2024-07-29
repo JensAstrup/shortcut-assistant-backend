@@ -3067,10 +3067,10 @@ escodegen@^1.6.1:
   optionalDependencies:
     source-map "~0.6.1"
 
-eslint-config-yenz@^5.3.0:
-  version "5.3.0"
-  resolved "https://registry.yarnpkg.com/eslint-config-yenz/-/eslint-config-yenz-5.3.0.tgz#f3f0dd7e7f89a464adb2615770b2250331455534"
-  integrity sha512-65eu/JhrVo54oyfm4j/8DRFcLqBg1g6Z1qyFpSPC4s19d8Uc4O1/7BAE1l0vQxhXVl0ytv6wawufzHI7jDSkOg==
+eslint-config-yenz@^5.5.0:
+  version "5.5.0"
+  resolved "https://registry.yarnpkg.com/eslint-config-yenz/-/eslint-config-yenz-5.5.0.tgz#771d02e0a2e5e1a01e97c902836f98f75186c98f"
+  integrity sha512-5SVb2P7UB5qJMs5+DmLeIy5C/ngRrf4bxlx6P8bUZgRVzUVA+YDUzvyacuh5E+96H0F2wPDyh0zxf3JrjKKJ2A==
   dependencies:
     "@eslint/js" "^9.3.0"
     "@stylistic/eslint-plugin" "^2.1.0"
