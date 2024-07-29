@@ -26,7 +26,7 @@
     "shortcut-api": "^4.1.2",
     "ts-node": "^10.9.2",
     "typeorm": "^0.3.20",
-    "typescript": "^5.4.5",
+    "typescript": "^5.5.4",
     "winston": "^3.13.1",
     "zod": "^3.23.8"
   },
